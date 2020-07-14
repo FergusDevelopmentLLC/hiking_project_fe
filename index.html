@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <title>Get Hikes</title>
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="iconify.min.js"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
   <style>
@@ -21,23 +22,31 @@
       width: 100%;
     }
  
-    #info {
+    #search {
       display: block;
-      position: relative;
-      margin: 0px auto;
-      width: 50%;
-      padding: 10px;
-      border: none;
+      position: absolute;
+      right: 0;
+      width: 20rem;
+      padding: 0;
+      border-left: 1px solid lightgray;
+      border-bottom: 1px solid lightgray;
       border-radius: 3px;
       font-size: 12px;
-      text-align: center;
       color: #222;
       background: #fff;
     }
 
+    #search-form {
+      margin-top: .2rem;
+      display: flex;  
+      flex-direction: row;
+    }
+    
     #modal {
       display: none;
-      position: relative;
+      position: absolute;
+      left: 0;
+      top: 0;
       width: 20rem;
       padding: 1rem;
       border-right: 1px solid lightgray;
@@ -74,6 +83,30 @@
       color: #000;
     }
 
+    .iconify { 
+      width: 1rem; 
+      height: 1rem; 
+      margin: .6rem .4rem;
+    }
+
+    input {
+      margin: .5rem 0 .5rem 0;
+      width: 16rem;
+    }
+
+    #search-title {
+      margin: .5rem 0 0 .5rem;
+      font-weight: bold;
+    }
+
+    #pointer {
+      display: none;
+    }
+    
+    #crosshair {
+      display: none;
+    }
+
   </style>
 </head>
 
@@ -83,10 +116,23 @@
   <div id="modal">
     <div id="close"><a>X</a></div>
   </div>
+  <div id="search">
+    <div id="search-title">Search for hiking trails:</div>
+    <form id="search-form">
+      <div><span class="iconify" data-icon="et-magnifying-glass" data-inline="false"></span></div>
+      <div><input type="text" placeholder="By city..." /></div>
+      <div>
+        <span class="iconify" id="crosshair" data-icon="bx:bx-target-lock" data-inline="false"></span>
+        <span class="iconify" id="pointer" data-icon="clarity:cursor-hand-open-line" data-inline="false"></span>
+      </div>
+    </form>
+  </div>
+
   <script>
 
     // get bounding box: http://bboxfinder.com
     let mapBounds = [-125.903320,24.726875,-66.621094,49.639177]//Southwest corner, Northeast corner
+    let cursorMode = 'pointer'
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGNhcnRlciIsImEiOiJjamV4b2g3Z2ExOGF4MzFwN3R1dHJ3d2J4In0.Ti-hnuBH8W4bHn7k6GCpGw';
 
@@ -98,10 +144,32 @@
       minZoom: 3.99
     })
 
+    document.getElementById('pointer').onclick = function(){
+      cursorMode = 'pointer';
+      document.getElementById('pointer').style.display = "none"
+      document.getElementById('crosshair').style.display = "block"
+    }
+
+    document.getElementById('crosshair').onclick = function(){
+      cursorMode = 'crosshair';
+      document.getElementById('pointer').style.display = "block"
+      document.getElementById('crosshair').style.display = "none"
+    }
+
     map.on('click', async (e) => {
-      let url = `https://hiking-project-api.herokuapp.com/trails/${e.lngLat.lat}/${e.lngLat.lng}/25/10`
-      let data = await fetch(url).then(r => r.json())
-      populateModal(data, e.lngLat.lat, e.lngLat.lng)
+      if(cursorMode == 'crosshair') {
+        let url = `https://hiking-project-api.herokuapp.com/trails/${e.lngLat.lat}/${e.lngLat.lng}/25/10`
+        let data = await fetch(url).then(r => r.json())
+        populateModal(data, e.lngLat.lat, e.lngLat.lng)
+      }
+    })
+
+    map.on('mouseover', function(e) {
+      map.getCanvas().style.cursor = cursorMode
+    })
+
+    map.on('mouseout', function(e) {
+      map.getCanvas().style.cursor = "default"
     })
 
     populateModal = (data, latitude, longitude) => {
@@ -137,6 +205,9 @@
       document.getElementById('modal').style.display = "block"
     }
     
+    document.getElementById('crosshair').style.display = "block"
+    document.getElementById('pointer').style.display = "none"
+
     document.getElementById('close').onclick = function(){
       document.getElementById('modal').style.display = "none"
     }
