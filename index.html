@@ -11,6 +11,11 @@
     body {
       margin: 0;
       padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    ol {
+      padding: 0 0 0 2rem;
     }
 
     #map {
@@ -19,11 +24,7 @@
       bottom: 0;
       width: 100%;
     }
-  </style>
-</head>
-
-<body>
-  <style type="text/css">
+ 
     #info {
       display: block;
       position: relative;
@@ -37,9 +38,33 @@
       color: #222;
       background: #fff;
     }
+
+    #modal {
+      display: none;
+      position: relative;
+      margin: 25% auto;
+      width: 50%;
+      padding: 10px;
+      border: 1px solid gray;
+      border-radius: 3px;
+      font-size: 1rem;
+      color: #222;
+      background: #fff;
+    }
+
+    h1 {
+      font-size: 1rem;
+    }
+    
+
   </style>
+</head>
+
+<body>
+  
   <div id="map"></div>
   <pre id="info"></pre>
+  <div id="modal"></div>
   <script>
 
     // get bounding box: http://bboxfinder.com
@@ -65,10 +90,45 @@
         JSON.stringify(e.lngLat.wrap());
     });
 
-    map.on('click', function (e) {
-      console.log(`map clicked at this lng/lat: ${e.lngLat.wrap()}`)
-    });
+    map.on('click', async (e) => {
+      let url = `https://hiking-project-api.herokuapp.com/trails/${e.lngLat.lat}/${e.lngLat.lng}/25/10`
+      let data = await fetch(url).then(r => r.json())
+      populateModal(data, e.lngLat.lat, e.lngLat.lng)
+    })
 
+    populateModal = (data, latitude, longitude) => {
+
+      if (document.getElementById('trails_title')) {
+        document.getElementById('trails_title').remove()
+      }
+
+      if (document.getElementById('trails_ol')) {
+        document.getElementById('trails_ol').remove()
+      }
+
+      let title = document.createElement('h1');
+      title["id"] = "trails_title"
+      
+      if(data.length > 0) {
+        title.appendChild(document.createTextNode(`Trails for the coords: ${latitude}, ${longitude}`))
+        let list = document.createElement('ol');
+        list["id"] = "trails_ol"
+        data.forEach((trail) => {
+          let item = document.createElement('li')
+          item.innerHTML = `<a href='${trail["url"]}' target='_blank'>${trail["name"]}</a> - ${trail["summary"]}`
+          list.appendChild(item);
+        })
+        document.getElementById('modal').appendChild(title)
+        document.getElementById('modal').appendChild(list)
+      }
+      else {
+        title.appendChild(document.createTextNode(`No trails found for: ${latitude}, ${longitude}`))
+        document.getElementById('modal').appendChild(title)
+      }
+      
+      document.getElementById('modal').style.display = "block"
+    }
+    
   </script>
 
 </body>
