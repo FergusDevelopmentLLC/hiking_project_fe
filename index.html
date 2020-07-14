@@ -14,10 +14,6 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    ol {
-      padding: 0 0 0 2rem;
-    }
-
     #map {
       position: absolute;
       top: 0;
@@ -42,11 +38,11 @@
     #modal {
       display: none;
       position: relative;
-      margin: 10% auto;
-      width: 50%;
-      padding: 10px;
-      border: 1px solid gray;
-      border-radius: 3px;
+      width: 20rem;
+      padding: 1rem;
+      border-right: 1px solid lightgray;
+      border-bottom: 1px solid lightgray;
+      border-radius: .2rem;
       font-size: 1rem;
       color: #222;
       background: #fff;
@@ -54,8 +50,29 @@
 
     h1 {
       font-size: 1rem;
+      margin: 0;
+    }
+
+    ol {
+      margin: 0;
+      padding: .5rem 0 0 1.5rem;
     }
     
+    ol li {
+      font-size: .9rem;
+      padding: 0 0 .4rem 0;
+    }
+
+    #close {
+      float: right;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    #close a {
+      text-decoration: none;
+      color: #000;
+    }
 
   </style>
 </head>
@@ -63,8 +80,9 @@
 <body>
   
   <div id="map"></div>
-  <pre id="info"></pre>
-  <div id="modal"></div>
+  <div id="modal">
+    <div id="close"><a>X</a></div>
+  </div>
   <script>
 
     // get bounding box: http://bboxfinder.com
@@ -79,16 +97,6 @@
       zoom: 3.99,
       minZoom: 3.99
     })
-
-    map.on('mousemove', function (e) {
-      document.getElementById('info').innerHTML =
-        // e.point is the x, y coordinates of the mousemove event relative
-        // to the top-left corner of the map
-        JSON.stringify(e.point) +
-        '<br />' +
-        // e.lngLat is the longitude, latitude geographical position of the event
-        JSON.stringify(e.lngLat.wrap());
-    });
 
     map.on('click', async (e) => {
       let url = `https://hiking-project-api.herokuapp.com/trails/${e.lngLat.lat}/${e.lngLat.lng}/25/10`
@@ -110,7 +118,7 @@
       title["id"] = "trails_title"
       
       if(data.length > 0) {
-        title.appendChild(document.createTextNode(`Trails for the coords: ${latitude}, ${longitude}`))
+        title.appendChild(document.createTextNode(`Trails for the coords: ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`))
         let list = document.createElement('ol');
         list["id"] = "trails_ol"
         data.forEach((trail) => {
@@ -129,6 +137,10 @@
       document.getElementById('modal').style.display = "block"
     }
     
+    document.getElementById('close').onclick = function(){
+      document.getElementById('modal').style.display = "none"
+    }
+
   </script>
 
 </body>
