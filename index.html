@@ -130,7 +130,7 @@
         document.getElementById('modal').appendChild(list)
       }
       else {
-        title.appendChild(document.createTextNode(`No trails found for: ${latitude}, ${longitude}`))
+        title.appendChild(document.createTextNode(`No trails found for: ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`))
         document.getElementById('modal').appendChild(title)
       }
       
