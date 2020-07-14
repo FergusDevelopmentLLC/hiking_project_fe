@@ -115,7 +115,7 @@
         list["id"] = "trails_ol"
         data.forEach((trail) => {
           let item = document.createElement('li')
-          item.innerHTML = `<a href='${trail["url"]}' target='_blank'>${trail["name"]}</a> - ${trail["summary"]}`
+          item.innerHTML = `<a href='${trail["url"]}' target='_blank'>${trail["name"]}</a> - ${trail["location"]} - ${trail["summary"]}`
           list.appendChild(item);
         })
         document.getElementById('modal').appendChild(title)
