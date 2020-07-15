@@ -99,6 +99,11 @@
       font-weight: bold;
     }
 
+    #search-subtitle {
+      margin: 0 .5rem .5rem .5rem;
+      font-weight: bold;
+    }
+    
     #pointer {
       display: none;
     }
@@ -117,15 +122,16 @@
     <div id="close"><a>X</a></div>
   </div>
   <div id="search">
-    <div id="search-title">Search for hiking trails:</div>
+    <div id="search-title">Search for hiking trails by city...</div>
     <form id="search-form">
       <div><span class="iconify" data-icon="et-magnifying-glass" data-inline="false"></span></div>
       <div><input type="text" placeholder="By city..." /></div>
-      <div>
-        <span class="iconify" id="crosshair" data-icon="bx:bx-target-lock" data-inline="false"></span>
-        <span class="iconify" id="pointer" data-icon="clarity:cursor-hand-open-line" data-inline="false"></span>
+      <div id="mode-wrapper">
+        <div id="crosshair"><span class="iconify" data-icon="bx:bx-target-lock" data-inline="false"></span></div>
+        <div id="pointer"><span class="iconify" data-icon="clarity:cursor-hand-open-line" data-inline="false"></span></div>
       </div>
     </form>
+    <div id="search-subtitle">Or, click the crosshair icon to select a search location on the map.</div>
   </div>
 
   <script>
@@ -144,13 +150,13 @@
       minZoom: 3.99
     })
 
-    document.getElementById('pointer').onclick = function(){
+    document.getElementById("pointer").onclick = function(){
       cursorMode = 'pointer'
       document.getElementById('pointer').style.display = "none"
       document.getElementById('crosshair').style.display = "block"
     }
 
-    document.getElementById('crosshair').onclick = function(){
+    document.getElementById("crosshair").onclick = function(){
       cursorMode = 'crosshair'
       document.getElementById('pointer').style.display = "block"
       document.getElementById('crosshair').style.display = "none"
@@ -171,6 +177,19 @@
     map.on('mouseout', function(e) {
       map.getCanvas().style.cursor = "default"
     })
+    
+    document.getElementById('close').onclick = function(){
+      document.getElementById('modal').style.display = "none"
+    }
+
+    if(cursorMode == 'pointer') {
+      document.getElementById('pointer').style.display = "none"
+      document.getElementById('crosshair').style.display = "block"
+    }
+    else {
+      document.getElementById('pointer').style.display = "none"
+      document.getElementById('crosshair').style.display = "block"
+    }
 
     populateModal = (data, latitude, longitude) => {
 
@@ -184,7 +203,7 @@
 
       let title = document.createElement('h1');
       title["id"] = "trails_title"
-      
+
       if(data.length > 0) {
         title.appendChild(document.createTextNode(`Trails for the coords: ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`))
         let list = document.createElement('ol');
@@ -201,15 +220,8 @@
         title.appendChild(document.createTextNode(`No trails found for: ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`))
         document.getElementById('modal').appendChild(title)
       }
-      
-      document.getElementById('modal').style.display = "block"
-    }
-    
-    document.getElementById('crosshair').style.display = "block"
-    document.getElementById('pointer').style.display = "none"
 
-    document.getElementById('close').onclick = function(){
-      document.getElementById('modal').style.display = "none"
+      document.getElementById('modal').style.display = "block"
     }
 
   </script>
