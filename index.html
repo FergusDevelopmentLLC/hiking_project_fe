@@ -190,7 +190,14 @@
         document.getElementById('modal').appendChild(list)
       }
       else {
-        title.appendChild(document.createTextNode(`No trails found for: ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`))
+        
+        if(opts["city"] && opts["state_abbrev"]) {
+          title.appendChild(document.createTextNode(`No trails found for: ${opts["city"]}, ${opts["state_abbrev"].toUpperCase()}`))
+        }
+        else if (opts["latitude"] && opts["longitude"]) {
+          title.appendChild(document.createTextNode(`Trails for the coords: ${opts["latitude"].toFixed(2)}, ${opts["longitude"].toFixed(2)}`))
+        }
+
         document.getElementById('modal').appendChild(title)
       }
 
@@ -254,8 +261,9 @@
           let city_raw = search_value_arr[0].trim();
           let city_urlified = URLify(city_raw.toLowerCase())
           let state_abbrev = search_value_arr[1].trim().toLowerCase()
-          //let api_url = `http://hiking-project-api.herokuapp.com/cities/${city_urlified}/${state_abbrev}/trails?limit=10`
-          let api_url = `http://127.0.0.1:3000/cities/${city_urlified}/${state_abbrev}/trails?limit=10`
+          let api_url = `http://hiking-project-api.herokuapp.com/cities/${city_urlified}/${state_abbrev}/trails?limit=10`
+          // let api_url = `http://127.0.0.1:3000/cities/${city_urlified}/${state_abbrev}/trails?limit=10`
+          console.log('api_url', api_url)
           let data = await fetch(api_url).then(r => r.json())
           populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
           document.getElementById("input_search").value = '';
