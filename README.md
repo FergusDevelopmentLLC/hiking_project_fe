@@ -25,3 +25,5 @@ https://gifyu.com/?lang=en
 https://www.npmjs.com/package/parameterize
 
 https://gist.github.com/pjambet/3710461
+
+https://stackoverflow.com/questions/456177/function-overloading-in-javascript-best-practices
