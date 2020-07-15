@@ -123,9 +123,9 @@
   </div>
   <div id="search">
     <div id="search-title">Search for hiking trails by city...</div>
-    <form id="search-form">
+    <form id="search-form" onkeydown="return event.key != 'Enter';">
       <div><span class="iconify" data-icon="et-magnifying-glass" data-inline="false"></span></div>
-      <div><input type="text" placeholder="By city..." /></div>
+      <div><input type="text" id="input_search" placeholder="By city..." /></div>
       <div id="mode-wrapper">
         <div id="crosshair"><span class="iconify" data-icon="bx:bx-target-lock" data-inline="false"></span></div>
         <div id="pointer"><span class="iconify" data-icon="clarity:cursor-hand-open-line" data-inline="false"></span></div>
@@ -181,6 +181,14 @@
     document.getElementById('close').onclick = function(){
       document.getElementById('modal').style.display = "none"
     }
+
+    document.getElementById("input_search").addEventListener("keyup", function(event) {
+      event.preventDefault()
+      if (event.keyCode === 13) {
+        console.log(document.getElementById("input_search").value)
+        //document.getElementById("id_of_button").click()
+      }
+    })
 
     if(cursorMode == 'pointer') {
       document.getElementById('pointer').style.display = "none"
