@@ -6,6 +6,7 @@
   <title>Find Hiking Trails</title>
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
   <script src="iconify.min.js"></script>
+  <script src="parameterize.js"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
   <style>
@@ -126,10 +127,10 @@
     <div id="close"><a>X</a></div>
   </div>
   <div id="search">
-    <div id="search-title">Search for hiking trails by <strong>city</strong>...</div>
+    <div id="search-title">Search by <strong>city</strong> (include state):</div>
     <form id="search-form" onkeydown="return event.key != 'Enter';">
       <div><span class="iconify" data-icon="et-magnifying-glass" data-inline="false"></span></div>
-      <div><input type="text" id="input_search" placeholder="By city..." /></div>
+      <div><input type="text" id="input_search" placeholder="Boulder, CO" /></div>
       <div id="mode-wrapper">
         <div id="crosshair"><span class="iconify" data-icon="bx:bx-target-lock" data-inline="false"></span></div>
         <div id="pointer"><span class="iconify" data-icon="vaadin:pointer" data-inline="false"></span></div>
@@ -156,7 +157,7 @@
       document.getElementById('search-subtitle').innerHTML = message
     }
 
-    populateModal = (data, latitude, longitude) => {
+    populateModal = (data, opts) => {
 
       if (document.getElementById('trails_title')) {
         document.getElementById('trails_title').remove()
@@ -170,7 +171,14 @@
       title["id"] = "trails_title"
 
       if(data.length > 0) {
-        title.appendChild(document.createTextNode(`Trails for the coords: ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`))
+
+        if(opts["city"] && opts["state_abbrev"]) {
+          title.appendChild(document.createTextNode(`Trails for the city: ${opts["city"]}, ${opts["state_abbrev"].toUpperCase()}`))
+        }
+        else if (opts["latitude"] && opts["longitude"]) {
+          title.appendChild(document.createTextNode(`Trails for the coords: ${opts["latitude"].toFixed(2)}, ${opts["longitude"].toFixed(2)}`))
+        }
+        
         let list = document.createElement('ol');
         list["id"] = "trails_ol"
         data.forEach((trail) => {
@@ -221,7 +229,7 @@
       if(cursorMode == 'crosshair') {
         let url = `https://hiking-project-api.herokuapp.com/trails/${e.lngLat.lat}/${e.lngLat.lng}/25/10`
         let data = await fetch(url).then(r => r.json())
-        populateModal(data, e.lngLat.lat, e.lngLat.lng)
+        populateModal(data, { "latitude": e.lngLat.lat, "longitude" : e.lngLat.lng })
       }
     })
 
@@ -237,11 +245,21 @@
       document.getElementById('modal').style.display = "none"
     }
 
-    document.getElementById("input_search").addEventListener("keyup", function(event) {
+    document.getElementById("input_search").addEventListener("keyup", async function(event) {
       event.preventDefault()
       if (event.keyCode === 13) {
-        console.log(document.getElementById("input_search").value)
-        //document.getElementById("id_of_button").click()
+        let search_value = document.getElementById("input_search").value
+        let search_value_arr = search_value.split(',')
+        if (search_value_arr.length > 0) {
+          let city_raw = search_value_arr[0].trim();
+          let city_urlified = URLify(city_raw.toLowerCase())
+          let state_abbrev = search_value_arr[1].trim().toLowerCase()
+          //let api_url = `http://hiking-project-api.herokuapp.com/cities/${city_urlified}/${state_abbrev}/trails?limit=10`
+          let api_url = `http://127.0.0.1:3000/cities/${city_urlified}/${state_abbrev}/trails?limit=10`
+          let data = await fetch(api_url).then(r => r.json())
+          populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
+          document.getElementById("input_search").value = '';
+        }
       }
     })
 

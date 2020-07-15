@@ -21,3 +21,7 @@ https://iconify.design/icon-sets/?query=target
 https://stackoverflow.com/questions/155188/trigger-a-button-click-with-javascript-on-the-enter-key-in-a-text-box
 
 https://gifyu.com/?lang=en
+
+https://www.npmjs.com/package/parameterize
+
+https://gist.github.com/pjambet/3710461
