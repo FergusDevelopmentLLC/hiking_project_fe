@@ -86,26 +86,30 @@
     .iconify { 
       width: 1rem; 
       height: 1rem; 
-      margin: .6rem .4rem;
+      margin: .8rem .4rem;
     }
 
     input {
       margin: .5rem 0 .5rem 0;
       width: 16rem;
+      height: 1.4rem;
     }
 
     #search-title {
       margin: .5rem 0 0 .5rem;
-      font-weight: bold;
     }
 
     #search-subtitle {
       margin: 0 .5rem .5rem .5rem;
-      font-weight: bold;
     }
     
     #pointer {
-      display: none;
+      display: none;      
+    }
+
+    #pointer svg {
+      width: 1.2rem; 
+      height: 1.05rem; 
     }
     
     #crosshair {
@@ -122,81 +126,34 @@
     <div id="close"><a>X</a></div>
   </div>
   <div id="search">
-    <div id="search-title">Search for hiking trails by city...</div>
+    <div id="search-title">Search for hiking trails by <strong>city</strong>...</div>
     <form id="search-form" onkeydown="return event.key != 'Enter';">
       <div><span class="iconify" data-icon="et-magnifying-glass" data-inline="false"></span></div>
       <div><input type="text" id="input_search" placeholder="By city..." /></div>
       <div id="mode-wrapper">
         <div id="crosshair"><span class="iconify" data-icon="bx:bx-target-lock" data-inline="false"></span></div>
-        <div id="pointer"><span class="iconify" data-icon="clarity:cursor-hand-open-line" data-inline="false"></span></div>
+        <div id="pointer"><span class="iconify" data-icon="vaadin:pointer" data-inline="false"></span></div>
       </div>
     </form>
-    <div id="search-subtitle">Or, click the crosshair icon to select a search location on the map.</div>
+    <div id="search-subtitle"></div>
   </div>
 
   <script>
 
-    // get bounding box: http://bboxfinder.com
-    let mapBounds = [-125.903320,24.726875,-66.621094,49.639177]//Southwest corner, Northeast corner
-    let cursorMode = 'pointer'
-
-    mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGNhcnRlciIsImEiOiJjamV4b2g3Z2ExOGF4MzFwN3R1dHJ3d2J4In0.Ti-hnuBH8W4bHn7k6GCpGw';
-
-    let map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/light-v10',
-      center: [(mapBounds[0] + mapBounds[2]) / 2, (mapBounds[1] + mapBounds[3]) / 2],
-      zoom: 3.99,
-      minZoom: 3.99
-    })
-
-    document.getElementById("pointer").onclick = function(){
-      cursorMode = 'pointer'
-      document.getElementById('pointer').style.display = "none"
-      document.getElementById('crosshair').style.display = "block"
-    }
-
-    document.getElementById("crosshair").onclick = function(){
-      cursorMode = 'crosshair'
-      document.getElementById('pointer').style.display = "block"
-      document.getElementById('crosshair').style.display = "none"
-    }
-
-    map.on('click', async (e) => {
-      if(cursorMode == 'crosshair') {
-        let url = `https://hiking-project-api.herokuapp.com/trails/${e.lngLat.lat}/${e.lngLat.lng}/25/10`
-        let data = await fetch(url).then(r => r.json())
-        populateModal(data, e.lngLat.lat, e.lngLat.lng)
+    setCursors = () => {
+      
+      let message;
+      if(cursorMode == 'pointer') {
+        document.getElementById('pointer').style.display = "none"
+        document.getElementById('crosshair').style.display = "block"
+        message = "Or, click the <strong>crosshair</strong> to search by specific location"
       }
-    })
-
-    map.on('mouseover', function(e) {
-      map.getCanvas().style.cursor = cursorMode
-    })
-
-    map.on('mouseout', function(e) {
-      map.getCanvas().style.cursor = "default"
-    })
-    
-    document.getElementById('close').onclick = function(){
-      document.getElementById('modal').style.display = "none"
-    }
-
-    document.getElementById("input_search").addEventListener("keyup", function(event) {
-      event.preventDefault()
-      if (event.keyCode === 13) {
-        console.log(document.getElementById("input_search").value)
-        //document.getElementById("id_of_button").click()
+      else {
+        document.getElementById('pointer').style.display = "block"
+        document.getElementById('crosshair').style.display = "none"
+        message = "Or, click the <strong>pointer</strong> to pan the map"
       }
-    })
-
-    if(cursorMode == 'pointer') {
-      document.getElementById('pointer').style.display = "none"
-      document.getElementById('crosshair').style.display = "block"
-    }
-    else {
-      document.getElementById('pointer').style.display = "none"
-      document.getElementById('crosshair').style.display = "block"
+      document.getElementById('search-subtitle').innerHTML = message
     }
 
     populateModal = (data, latitude, longitude) => {
@@ -231,6 +188,64 @@
 
       document.getElementById('modal').style.display = "block"
     }
+
+    // get bounding box: http://bboxfinder.com
+    let mapBounds = [-125.903320,24.726875,-66.621094,49.639177]//Southwest corner, Northeast corner
+    let cursorMode = 'pointer'
+
+    mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGNhcnRlciIsImEiOiJjamV4b2g3Z2ExOGF4MzFwN3R1dHJ3d2J4In0.Ti-hnuBH8W4bHn7k6GCpGw';
+
+    let map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v10',
+      center: [(mapBounds[0] + mapBounds[2]) / 2, (mapBounds[1] + mapBounds[3]) / 2],
+      zoom: 3.99,
+      minZoom: 3.99
+    })
+
+    document.getElementById("pointer").onclick = function(){
+      cursorMode = 'pointer'
+      document.getElementById('pointer').style.display = "none"
+      document.getElementById('crosshair').style.display = "block"
+      setCursors()
+    }
+
+    document.getElementById("crosshair").onclick = function(){
+      cursorMode = 'crosshair'
+      document.getElementById('pointer').style.display = "block"
+      document.getElementById('crosshair').style.display = "none"
+      setCursors()
+    }
+
+    map.on('click', async (e) => {
+      if(cursorMode == 'crosshair') {
+        let url = `https://hiking-project-api.herokuapp.com/trails/${e.lngLat.lat}/${e.lngLat.lng}/25/10`
+        let data = await fetch(url).then(r => r.json())
+        populateModal(data, e.lngLat.lat, e.lngLat.lng)
+      }
+    })
+
+    map.on('mouseover', function(e) {
+      map.getCanvas().style.cursor = cursorMode
+    })
+
+    map.on('mouseout', function(e) {
+      map.getCanvas().style.cursor = "default"
+    })
+    
+    document.getElementById('close').onclick = function(){
+      document.getElementById('modal').style.display = "none"
+    }
+
+    document.getElementById("input_search").addEventListener("keyup", function(event) {
+      event.preventDefault()
+      if (event.keyCode === 13) {
+        console.log(document.getElementById("input_search").value)
+        //document.getElementById("id_of_button").click()
+      }
+    })
+
+    setCursors()
 
   </script>
 
