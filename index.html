@@ -271,8 +271,8 @@
         source: 'points',
         layout: {},
         paint: {
-          'circle-radius': 3,
-          'circle-color': 'blue',
+          'circle-radius': 5,
+          'circle-color': '#4d9221',
           'circle-opacity': 1
         }
       })
@@ -286,7 +286,7 @@
 
     let map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/light-v10',
+      style: 'mapbox://styles/mapbox/outdoors-v11',
       center: [(mapBounds[0] + mapBounds[2]) / 2, (mapBounds[1] + mapBounds[3]) / 2],
       zoom: 3.99,
       minZoom: 3.99
