@@ -31,3 +31,7 @@ https://stackoverflow.com/questions/456177/function-overloading-in-javascript-be
 https://stackoverflow.com/questions/47639248/using-an-array-of-longitudes-and-latitudes-to-plot-on-mapbox
 
 https://codepen.io/AshutoshD/pen/dMEGqM
+
+https://stackoverflow.com/questions/684672/how-do-i-loop-through-or-enumerate-a-javascript-object
+
+https://docs.mapbox.com/help/tutorials/create-interactive-hover-effects-with-mapbox-gl-js/
