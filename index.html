@@ -205,18 +205,15 @@
       document.getElementById('modal').style.display = "block"
     }
 
-    populateMap = (data, opts) => {
+    populateMap = (data) => {
 
       var featureCollection = [];
 
       if (data.length > 0) {
-
         data.forEach(function (trail) {
-
           coordinates = new Array()
-          coordinates.push(parseFloat(trail["latitude"]))
           coordinates.push(parseFloat(trail["longitude"]))
-          
+          coordinates.push(parseFloat(trail["latitude"]))
           featureCollection.push({
             "type": "Feature",
             "geometry": {
@@ -224,37 +221,61 @@
               "coordinates": coordinates
             },
             "properties": {
-              "title": "Mapbox DC",
-              "icon": "monument"
+              "hiking_project_id": trail["hiking_project_id"],
+              "name": trail["hiking_project_id"],
+              "trail_type": trail["trail_type"],
+              "length": trail["length"],
+              "summary": trail["summary"],
+              "stars": trail["stars"],
+              "starVotes": trail["starVotes"],
+              "location": trail["location"],
+              "imgSqSmall": trail["imgSqSmall"],
+              "imgSmall": trail["imgSmall"],
+              "imgSmallMed": trail["imgSmallMed"],
+              "imgMedium": trail["imgMedium"],
+              "difficulty": trail["difficulty"],
+              "ascent": trail["ascent"],
+              "descent": trail["descent"],
+              "high": trail["high"],
+              "low": trail["low"],
+              "longitude": trail["longitude"],
+              "latitude": trail["latitude"],
+              "url": trail["url"],
+              "conditionStatus": trail["conditionStatus"],
+              "conditionDetails": trail["conditionDetails"],
+              "conditionDate": trail["conditionDate"]
             }
           });
         })
-
-        map.addLayer({
-          "id": "points",
-          "type": "circle",
-          "source": {
-            "type": "geojson",
-            "data": {
-              "type": "FeatureCollection",
-              "features": featureCollection
-            }
-          },
-          'layout': {},
-          'paint': {
-                    'fill-color': '#088',
-                    'fill-opacity': 0.8
-                  }
-        })
-
-        console.log('here')
-      }
-      else {
-        alert('no data')
       }
 
-      console.log('featureCollection', featureCollection)
+      if (map.getLayer("points")) {
+        map.removeLayer("points");
+      }
 
+      if (map.getSource("points")) {
+        map.removeSource("points");
+      }
+
+      map.addSource('points', {
+        'type': 'geojson',
+        'data': {
+          'type': 'FeatureCollection',
+          'features': featureCollection
+        }
+      });
+
+      map.addLayer({
+        id: 'points',
+        type: 'circle',
+        source: 'points',
+        layout: {},
+        paint: {
+          'circle-radius': 3,
+          'circle-color': 'blue',
+          'circle-opacity': 1
+        }
+      })
     }
 
     // get bounding box: http://bboxfinder.com
@@ -291,7 +312,8 @@
         let url = `https://hiking-project-api.herokuapp.com/trails/${e.lngLat.lat}/${e.lngLat.lng}/25/10`
         let data = await fetch(url).then(r => r.json())
         populateModal(data, { "latitude": e.lngLat.lat, "longitude": e.lngLat.lng })
-        //populateMap(data, { "latitude": e.lngLat.lat, "longitude": e.lngLat.lng })
+        populateMap(data)
+        map.flyTo({ center: [e.lngLat.lng, e.lngLat.lat], essential: true, zoom: 8 })
         document.getElementById('loading').style.visibility = 'hidden';
       }
     })
@@ -323,7 +345,9 @@
           console.log('api_url', api_url)
           let data = await fetch(api_url).then(r => r.json())
           populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
-          document.getElementById("input_search").value = '';
+          populateMap(data)
+          if(data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 9 })
+          document.getElementById("input_search").value = ''
         }
         document.getElementById('loading').style.visibility = 'hidden';
       }
