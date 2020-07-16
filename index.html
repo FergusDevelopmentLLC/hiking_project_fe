@@ -9,6 +9,7 @@
   <script src="parameterize.js"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
+  <link rel="stylesheet" href="spinner.css">
   <style>
     body {
       margin: 0;
@@ -22,7 +23,7 @@
       bottom: 0;
       width: 100%;
     }
- 
+
     #search {
       display: block;
       position: absolute;
@@ -39,10 +40,10 @@
 
     #search-form {
       margin-top: .2rem;
-      display: flex;  
+      display: flex;
       flex-direction: row;
     }
-    
+
     #modal {
       display: none;
       position: absolute;
@@ -67,7 +68,7 @@
       margin: 0;
       padding: .5rem 0 0 1.5rem;
     }
-    
+
     ol li {
       font-size: .9rem;
       padding: 0 0 .4rem 0;
@@ -84,9 +85,9 @@
       color: #000;
     }
 
-    .iconify { 
-      width: 1rem; 
-      height: 1rem; 
+    .iconify {
+      width: 1rem;
+      height: 1rem;
       margin: .8rem .4rem;
     }
 
@@ -103,31 +104,31 @@
     #search-subtitle {
       margin: 0 .5rem .5rem .5rem;
     }
-    
-    #pointer {
-      display: none;      
-    }
 
-    #pointer svg {
-      width: 1.2rem; 
-      height: 1.05rem; 
-    }
-    
-    #crosshair {
+    #pointer {
       display: none;
     }
 
+    #pointer svg {
+      width: 1.2rem;
+      height: 1.05rem;
+    }
+
+    #crosshair {
+      display: none;
+    }
   </style>
 </head>
 
 <body>
-  
+
   <div id="map"></div>
+  <div id="loading" class="loading" onClick="hideSpinner()">Loading&#8230;</div>
   <div id="modal">
     <div id="close"><a>X</a></div>
   </div>
   <div id="search">
-    <div id="search-title">Search by <strong>city</strong> (include state):</div>
+    <div id="search-title">Search by <strong>city, state</strong>:</div>
     <form id="search-form" onkeydown="return event.key != 'Enter';">
       <div><span class="iconify" data-icon="et-magnifying-glass" data-inline="false"></span></div>
       <div><input type="text" id="input_search" placeholder="Boulder, CO" /></div>
@@ -142,9 +143,9 @@
   <script>
 
     setCursors = () => {
-      
+
       let message;
-      if(cursorMode == 'pointer') {
+      if (cursorMode == 'pointer') {
         document.getElementById('pointer').style.display = "none"
         document.getElementById('crosshair').style.display = "block"
         message = "Or, click the <strong>crosshair</strong> to search by specific location"
@@ -170,15 +171,15 @@
       let title = document.createElement('h1');
       title["id"] = "trails_title"
 
-      if(data.length > 0) {
+      if (data.length > 0) {
 
-        if(opts["city"] && opts["state_abbrev"]) {
+        if (opts["city"] && opts["state_abbrev"]) {
           title.appendChild(document.createTextNode(`Trails for the city: ${opts["city"]}, ${opts["state_abbrev"].toUpperCase()}`))
         }
         else if (opts["latitude"] && opts["longitude"]) {
           title.appendChild(document.createTextNode(`Trails for the coords: ${opts["latitude"].toFixed(2)}, ${opts["longitude"].toFixed(2)}`))
         }
-        
+
         let list = document.createElement('ol');
         list["id"] = "trails_ol"
         data.forEach((trail) => {
@@ -190,8 +191,8 @@
         document.getElementById('modal').appendChild(list)
       }
       else {
-        
-        if(opts["city"] && opts["state_abbrev"]) {
+
+        if (opts["city"] && opts["state_abbrev"]) {
           title.appendChild(document.createTextNode(`No trails found for: ${opts["city"]}, ${opts["state_abbrev"].toUpperCase()}`))
         }
         else if (opts["latitude"] && opts["longitude"]) {
@@ -204,8 +205,60 @@
       document.getElementById('modal').style.display = "block"
     }
 
+    populateMap = (data, opts) => {
+
+      var featureCollection = [];
+
+      if (data.length > 0) {
+
+        data.forEach(function (trail) {
+
+          coordinates = new Array()
+          coordinates.push(parseFloat(trail["latitude"]))
+          coordinates.push(parseFloat(trail["longitude"]))
+          
+          featureCollection.push({
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": coordinates
+            },
+            "properties": {
+              "title": "Mapbox DC",
+              "icon": "monument"
+            }
+          });
+        })
+
+        map.addLayer({
+          "id": "points",
+          "type": "circle",
+          "source": {
+            "type": "geojson",
+            "data": {
+              "type": "FeatureCollection",
+              "features": featureCollection
+            }
+          },
+          'layout': {},
+          'paint': {
+                    'fill-color': '#088',
+                    'fill-opacity': 0.8
+                  }
+        })
+
+        console.log('here')
+      }
+      else {
+        alert('no data')
+      }
+
+      console.log('featureCollection', featureCollection)
+
+    }
+
     // get bounding box: http://bboxfinder.com
-    let mapBounds = [-125.903320,24.726875,-66.621094,49.639177]//Southwest corner, Northeast corner
+    let mapBounds = [-125.903320, 24.726875, -66.621094, 49.639177]//Southwest corner, Northeast corner
     let cursorMode = 'pointer'
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGNhcnRlciIsImEiOiJjamV4b2g3Z2ExOGF4MzFwN3R1dHJ3d2J4In0.Ti-hnuBH8W4bHn7k6GCpGw';
@@ -218,14 +271,14 @@
       minZoom: 3.99
     })
 
-    document.getElementById("pointer").onclick = function(){
+    document.getElementById("pointer").onclick = function () {
       cursorMode = 'pointer'
       document.getElementById('pointer').style.display = "none"
       document.getElementById('crosshair').style.display = "block"
       setCursors()
     }
 
-    document.getElementById("crosshair").onclick = function(){
+    document.getElementById("crosshair").onclick = function () {
       cursorMode = 'crosshair'
       document.getElementById('pointer').style.display = "block"
       document.getElementById('crosshair').style.display = "none"
@@ -233,28 +286,32 @@
     }
 
     map.on('click', async (e) => {
-      if(cursorMode == 'crosshair') {
+      if (cursorMode == 'crosshair') {
+        document.getElementById('loading').style.visibility = 'visible';
         let url = `https://hiking-project-api.herokuapp.com/trails/${e.lngLat.lat}/${e.lngLat.lng}/25/10`
         let data = await fetch(url).then(r => r.json())
-        populateModal(data, { "latitude": e.lngLat.lat, "longitude" : e.lngLat.lng })
+        populateModal(data, { "latitude": e.lngLat.lat, "longitude": e.lngLat.lng })
+        //populateMap(data, { "latitude": e.lngLat.lat, "longitude": e.lngLat.lng })
+        document.getElementById('loading').style.visibility = 'hidden';
       }
     })
 
-    map.on('mouseover', function(e) {
+    map.on('mouseover', function (e) {
       map.getCanvas().style.cursor = cursorMode
     })
 
-    map.on('mouseout', function(e) {
+    map.on('mouseout', function (e) {
       map.getCanvas().style.cursor = "default"
     })
-    
-    document.getElementById('close').onclick = function(){
+
+    document.getElementById('close').onclick = function () {
       document.getElementById('modal').style.display = "none"
     }
 
-    document.getElementById("input_search").addEventListener("keyup", async function(event) {
+    document.getElementById("input_search").addEventListener("keyup", async function (event) {
       event.preventDefault()
       if (event.keyCode === 13) {
+        document.getElementById('loading').style.visibility = 'visible';
         let search_value = document.getElementById("input_search").value
         let search_value_arr = search_value.split(',')
         if (search_value_arr.length > 0) {
@@ -268,6 +325,7 @@
           populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
           document.getElementById("input_search").value = '';
         }
+        document.getElementById('loading').style.visibility = 'hidden';
       }
     })
 
