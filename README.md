@@ -35,3 +35,5 @@ https://codepen.io/AshutoshD/pen/dMEGqM
 https://stackoverflow.com/questions/684672/how-do-i-loop-through-or-enumerate-a-javascript-object
 
 https://docs.mapbox.com/help/tutorials/create-interactive-hover-effects-with-mapbox-gl-js/
+
+https://tarekraafat.github.io/autoComplete.js/demo/

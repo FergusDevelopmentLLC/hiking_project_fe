@@ -331,7 +331,9 @@
     // get bounding box: http://bboxfinder.com
     let mapBounds = [-125.903320, 24.726875, -66.621094, 49.639177]//Southwest corner, Northeast corner
     let cursorMode = 'pointer'
-
+    //const url_prefix = 'https://hiking-project-api.herokuapp.com'
+    const url_prefix = 'http://127.0.0.1:3000'
+    
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGNhcnRlciIsImEiOiJjamV4b2g3Z2ExOGF4MzFwN3R1dHJ3d2J4In0.Ti-hnuBH8W4bHn7k6GCpGw';
 
     let map = new mapboxgl.Map({
@@ -345,13 +347,15 @@
     map.on('click', async (e) => {
       if (cursorMode == 'crosshair') {
         document.getElementById('loading').style.visibility = 'visible';
-        let url = `https://hiking-project-api.herokuapp.com/trails/${e.lngLat.lat}/${e.lngLat.lng}/25/10`
-        let data = await fetch(url).then(r => r.json())
-        populateModal(data, { "latitude": e.lngLat.lat, "longitude": e.lngLat.lng })
+        let lng = e.lngLat.lng
+        let lat = e.lngLat.lat
+        let api_url = `${url_prefix}/trails/${lat}/${lng}/25/500`
+        let data = await fetch(api_url).then(r => r.json())
+        populateModal(data, { "latitude": lat, "longitude": lng })
         clearMapData(map)
         addSource(map, getFeatureCollection(data))
         addPointsLayer(map)
-        map.flyTo({ center: [e.lngLat.lng, e.lngLat.lat], essential: true, zoom: 8 })
+        map.flyTo({ center: [lng, lat], essential: true, zoom: 8 })
         document.getElementById('loading').style.visibility = 'hidden';
       }
     })
@@ -396,16 +400,16 @@
           let city_raw = search_value_arr[0].trim();
           let city_urlified = URLify(city_raw.toLowerCase())
           let state_abbrev = search_value_arr[1].trim().toLowerCase()
-          let api_url = `http://hiking-project-api.herokuapp.com/cities/${city_urlified}/${state_abbrev}/trails?limit=10`
-          // let api_url = `http://127.0.0.1:3000/cities/${city_urlified}/${state_abbrev}/trails?limit=10`
-          
+          let api_url = `${url_prefix}/cities/${city_urlified}/${state_abbrev}/trails?limit=500`
           let data = await fetch(api_url).then(r => r.json())
+          
           populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
           clearMapData(map)
           addSource(map, getFeatureCollection(data))
           addPointsLayer(map)
 
           if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 9 })
+          
           document.getElementById("input_search").value = ''
         }
         document.getElementById('loading').style.visibility = 'hidden';
