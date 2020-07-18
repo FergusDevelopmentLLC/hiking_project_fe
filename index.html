@@ -349,13 +349,13 @@
         document.getElementById('loading').style.visibility = 'visible';
         let lng = e.lngLat.lng
         let lat = e.lngLat.lat
-        let api_url = `${url_prefix}/trails/${lat}/${lng}/25/500`
+        let api_url = `${url_prefix}/trails/${lat}/${lng}/25/15`
         let data = await fetch(api_url).then(r => r.json())
         populateModal(data, { "latitude": lat, "longitude": lng })
         clearMapData(map)
         addSource(map, getFeatureCollection(data))
         addPointsLayer(map)
-        map.flyTo({ center: [lng, lat], essential: true, zoom: 8 })
+        map.flyTo({ center: [lng, lat], essential: true, zoom: 10 })
         document.getElementById('loading').style.visibility = 'hidden';
       }
     })
@@ -400,7 +400,7 @@
           let city_raw = search_value_arr[0].trim();
           let city_urlified = URLify(city_raw.toLowerCase())
           let state_abbrev = search_value_arr[1].trim().toLowerCase()
-          let api_url = `${url_prefix}/cities/${city_urlified}/${state_abbrev}/trails?limit=500`
+          let api_url = `${url_prefix}/cities/${city_urlified}/${state_abbrev}/trails?limit=15`
           let data = await fetch(api_url).then(r => r.json())
           
           populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
@@ -408,7 +408,7 @@
           addSource(map, getFeatureCollection(data))
           addPointsLayer(map)
 
-          if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 9 })
+          if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
           
           document.getElementById("input_search").value = ''
         }
