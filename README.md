@@ -49,8 +49,18 @@ https://www.reddit.com/r/rails/comments/71by4m/help_the_asset_applicationcss_is_
 
 https://medium.com/front-end-weekly/how-to-fixing-error-peer-authentication-failed-for-user-username-in-rails-244b93671f23
 
-https://mirrors.tripadvisor.com/centos-vault/3.5/docs/html/rhel-sbs-en-3/s1-navigating-pwd.html#:~:text=To%20determine%20the%20exact%20location,and%20type%20the%20command%20pwd.&text=When%20you%20typed%20pwd%2C%20you,in%20the%20shell%20prompt%20window.
+https://mirrors.tripadvisor.com/centos-vault/3.5/docs/html/rhel-sbs-en-3/s1-navigating-pwd.html#:~:text=To%20determine%20the%20exact%20location,
+and%20type%20the%20command%20pwd.&text=When%20you%20typed%20pwd%2C%20you,in%20the%20shell%20prompt%20window.
 
 https://stackoverflow.com/questions/2748607/how-to-thoroughly-purge-and-reinstall-postgresql-on-ubuntu
 
 https://stackoverflow.com/questions/9987171/rails-fatal-peer-authentication-failed-for-user-pgerror
+
+https://stackoverflow.com/questions/32519062/how-to-start-a-rails-server-forever-on-ubuntu/32523742
+
+https://prathamesh.tech/2019/08/26/understanding-webpacker-in-rails-6/
+
+https://www.reddit.com/r/rails/comments/71by4m/help_the_asset_applicationcss_is_not_present_in/
+
+what is it? I just copied the environment var over from herokupg
+SECRET_KEY_BASE
