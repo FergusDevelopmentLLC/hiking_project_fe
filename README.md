@@ -64,3 +64,15 @@ https://www.reddit.com/r/rails/comments/71by4m/help_the_asset_applicationcss_is_
 
 what is it? I just copied the environment var over from herokupg
 SECRET_KEY_BASE
+
+https://passwordsgenerator.net/
+
+https://www.postgresqltutorial.com/postgresql-change-password/
+
+https://dba.stackexchange.com/questions/58312/how-to-get-the-name-of-the-current-database-from-within-postgresql
+
+https://www.digitalocean.com/community/questions/how-to-reset-the-firewall-on-ubuntu
+
+https://www.digitalocean.com/community/questions/opening-ports-on-my-server
+
+https://www.digitalocean.com/community/tutorials/how-to-use-nmap-to-scan-for-open-ports-on-your-vps
