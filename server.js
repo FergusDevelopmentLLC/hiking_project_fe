@@ -5,6 +5,8 @@ const app = express()
 
 app.use(express.static(__dirname + "/public")) //allows serving of static files in public folder
 
+const err = new Error('Not Found')
+
 // catch 404 and forward them to error handler
 // app.use((req, res, next) => {
 //   const err = new Error('Not Found')
