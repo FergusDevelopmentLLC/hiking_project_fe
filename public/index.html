@@ -191,13 +191,13 @@
         // Populate the popup and set its coordinates based on the feature found.
         popup.setLngLat(coordinates)
           .setHTML(tooltip_msg)
-          .addTo(map);
-      });
+          .addTo(map)
+      })
 
       map.on('mouseleave', 'points', function () {
-        map.getCanvas().style.cursor = '';
-        popup.remove();
-      });
+        map.getCanvas().style.cursor = cursorMode
+        popup.remove()
+      })
     }
 
     populateModal = (data, opts) => {
@@ -331,8 +331,8 @@
     // get bounding box: http://bboxfinder.com
     let mapBounds = [-125.903320, 24.726875, -66.621094, 49.639177]//Southwest corner, Northeast corner
     let cursorMode = 'pointer'
-    const url_prefix = 'http://138.68.23.63:3000'
-    //const url_prefix = 'http://127.0.0.1:3000'
+    //const url_prefix = 'http://138.68.23.63:3000'
+    const url_prefix = 'http://127.0.0.1:3000'
     
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGNhcnRlciIsImEiOiJjamV4b2g3Z2ExOGF4MzFwN3R1dHJ3d2J4In0.Ti-hnuBH8W4bHn7k6GCpGw';
 
@@ -349,7 +349,7 @@
         document.getElementById('loading').style.visibility = 'visible';
         let lng = e.lngLat.lng
         let lat = e.lngLat.lat
-        let api_url = `${url_prefix}/trails/${lat}/${lng}/25/15`
+        let api_url = `${url_prefix}/trails/${lat}/${lng}/5/15`
         let data = await fetch(api_url).then(r => r.json())
         populateModal(data, { "latitude": lat, "longitude": lng })
         clearMapData(map)
