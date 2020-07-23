@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>title</title>
+  <script src="parameterize.js"></script>
   <style>
     .search-container {
       position: relative;
@@ -108,12 +109,13 @@
                       "tags": ["New York, NY", "Los Angeles, CA", "Chicago, IL", "Houston, TX"]
                     }
                 ];
-
+    
+    //http://138.68.23.63:3000/cities/chicago/il/trails
     var opts = {
       data: acData,
       numResults: 10,
       searchPath: '/search?q=',
-      directPath: '/',
+      directPath: 'http://127.0.0.1:3000/cities/',
       container: document.querySelectorAll('.search-container')[0]
     };
 
@@ -145,7 +147,8 @@
               e.target.nextElementSibling.focus();
             }
           },
-          'input': function (e) {
+          'input': function (e) 
+          {
             var val = e.target.value.trim().replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
             return val ? insert(cacheFn(val, check)) : insert();
           }
@@ -198,7 +201,15 @@
           if (d && d[i]) {
             resultNodes[i].style.display = 'block';
             resultNodes[i].firstChild.nodeValue = d[i].tag;
-            resultNodes[i].href = options.directPath + encodeURIComponent(d[i].tag);
+            //resultNodes[i].href = options.directPath + encodeURIComponent(d[i].tag);
+            //resultNodes[i].href = `${options.directPath}${encodeURIComponent(d[i].tag)}/trails`;
+
+            let city_state = d[i].tag.replace(/\s+/g, '')
+            let city = URLify(city_state.split(',')[0].toLowerCase())
+            let state = city_state.split(',')[1].toLowerCase()
+
+            resultNodes[i].href = `${options.directPath}${city}/${state}/trails`;
+            
             //resultNodes[i].firstElementChild.firstChild.nodeValue = d[i].group;
           } else if (!d || !d[i]) {
             resultNodes[i].style.display = 'none';
