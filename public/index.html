@@ -62,40 +62,39 @@
       }
     })
 
-    map.on('load', function () {
+    map.on('load', () => {
       handlePopup()
     })
 
-    map.on('mouseover', function (e) {
+    map.on('mouseover', (e) => {
       map.getCanvas().style.cursor = cursorMode
     })
 
-    map.on('mouseout', function (e) {
+    map.on('mouseout', (e) => {
       map.getCanvas().style.cursor = "default"
     })
 
-    document.getElementById("pointer").onclick = function () {
+    document.getElementById("pointer").onclick = () => {
       cursorMode = 'pointer'
       document.getElementById('pointer').style.display = "none"
       document.getElementById('crosshair').style.display = "block"
       setCursors()
     }
 
-    document.getElementById("crosshair").onclick = function () {
+    document.getElementById("crosshair").onclick = () => {
       cursorMode = 'crosshair'
       document.getElementById('pointer').style.display = "block"
       document.getElementById('crosshair').style.display = "none"
       setCursors()
     }
 
-    document.getElementById('close').onclick = function () {
+    document.getElementById('close').onclick = () => {
       document.getElementById('modal').style.display = "none"
     }
 
-    document.getElementById("input_search").addEventListener("keyup", async function (event) {
+    document.getElementById("input_search").addEventListener("keyup", async (event) => {
       event.preventDefault()
       if (event.keyCode === 13) {
-        document.getElementById('loading').style.visibility = 'visible';
         let search_value = document.getElementById("input_search").value
         let search_value_arr = search_value.split(',')
         if (search_value_arr.length > 0) {
@@ -103,18 +102,17 @@
           let city_urlified = URLify(city_raw.toLowerCase())
           let state_abbrev = search_value_arr[1].trim().toLowerCase()
           let api_url = `${url_prefix}/cities/${city_urlified}/${state_abbrev}/trails?limit=15`
+          document.getElementById('loading').style.visibility = 'visible'  
           let data = await fetch(api_url).then(r => r.json())
-          
+          document.getElementById('loading').style.visibility = 'hidden'  
           populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
           clearMapData(map)
           addSource(map, getFeatureCollection(data))
           addPointsLayer(map)
-
           if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
-          
           document.getElementById("input_search").value = ''
         }
-        document.getElementById('loading').style.visibility = 'hidden';
+        
       }
     })
 
