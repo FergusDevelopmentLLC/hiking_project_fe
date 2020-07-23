@@ -6,7 +6,8 @@
   <title>Find Hiking Trails</title>
   
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  
+
+  <script src="js/cities.js"></script>
   <script src="js/iconify.min.js"></script>
   <script src="js/parameterize.js"></script>
   <script src="js/custom.js"></script>
@@ -102,17 +103,19 @@
   </script>
 
   <script>
+    
+
     var acData = [
                     {
                       "group": "",
-                      "tags": ["Denver, CO", "Denver, NY", "New York, NY", "New York, NYC", "Los Angeles, CA", "Chicago, IL", "Houston, TX", "Springfield, IL", "Springfield, MA", "Springfield, MT", "Springfield, AZ"]
+                      "tags": cities
                     }
-                ];
+                ]
     
     //http://138.68.23.63:3000/cities/chicago/il/trails
     var opts = {
       data: acData,
-      numResults: 100,
+      numResults: 15,
       searchPath: '/search?q=',
       directPath: 'http://127.0.0.1:3000/cities/',
       container: document.querySelectorAll('.search-container')[0]
@@ -251,7 +254,6 @@
       }
 
       function multiHandler(e) {
-        console.log('multiHandler')
         var k = e.keyCode,
           //assign a value to k if the up, down enter keys are pressed, or if the event is an input
           meth = k === 13 ? 'enter' : k === 38 ? 'up' : k === 40 ? 'down' : e.type === 'input' ? 'input' : null;
