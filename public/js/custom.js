@@ -11,6 +11,7 @@ setCursors = () => {
       document.getElementById('crosshair').style.display = "none"
       message = "Or, click the <strong>pointer</strong> to pan the map"
     }
+
     document.getElementById('search-subtitle').innerHTML = message
   }
 

@@ -13,9 +13,10 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
   
   <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
+  <link href="css/custom.css" rel="stylesheet" />
   <link href="css/spinner.css" rel="stylesheet" />
   <link href="css/autocomplete.css" rel="stylesheet" />
-  <link href="css/custom.css" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -25,22 +26,25 @@
   <div id="modal">
     <div id="close"><a>X</a></div>
   </div>
-  
-  <div id="outer-container">
+  <div id="search">
     <div id="search-title">Search by <strong>city, state</strong>:</div>
-    <div class="search-container">
-      <input class="search-input" id="input_search" placeholder="Boulder, CO">
-      <svg class="search-button" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-        <path fill="#009eda" d="m25.14381,22.4446l-5.4416,-5.4416c0.7341,-1.2095 1.1629,-2.6229 1.1641,-4.14c-0.0012,-4.4244 -3.583,-8.00627 -8.0039,-8.0086c-4.42316,0.00233 -8.00622,3.5842 -8.00622,8.0074c0,4.4209 3.58305,8.0039 8.00622,8.0039c1.5171,0 2.9317,-0.4299 4.14,-1.1629l5.4428,5.4428l2.6986,-2.701l0,0l0,0zm-17.23357,-9.5828c0.00465,-2.73478 2.21627,-4.94636 4.95097,-4.95219c2.7337,0.00583 4.9463,2.21742 4.951,4.95219c-0.0047,2.7336 -2.2173,4.9453 -4.951,4.9522c-2.7347,-0.0069 -4.94632,-2.2186 -4.95097,-4.9522z" />
-      </svg>
-      <div class="ac-results-wrapper"></div>
-    </div>
+    <form id="search-form" onkeydown="return event.key != 'Enter';">
+      <div><span class="iconify" data-icon="et-magnifying-glass" data-inline="false"></span></div>
+      <div><input type="text" id="input_search" placeholder="Boulder, CO" /></div>
+      <div id="mode-wrapper">
+        <div id="crosshair"><span class="iconify" data-icon="bx:bx-target-lock" data-inline="false"></span></div>
+        <div id="pointer"><span class="iconify" data-icon="vaadin:pointer" data-inline="false"></span></div>
+      </div>
+    </form>
     <div id="search-subtitle"></div>
-    <div id="mode-wrapper">
-      <div id="crosshair"><span class="iconify" data-icon="bx:bx-target-lock" data-inline="false"></span></div>
-      <div id="pointer"><span class="iconify" data-icon="vaadin:pointer" data-inline="false"></span></div>
-    </div>
-    
+  </div>
+
+  <div class="search-container">
+    <input class="search-input">
+    <svg class="search-button" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+      <path fill="#009eda" d="m25.14381,22.4446l-5.4416,-5.4416c0.7341,-1.2095 1.1629,-2.6229 1.1641,-4.14c-0.0012,-4.4244 -3.583,-8.00627 -8.0039,-8.0086c-4.42316,0.00233 -8.00622,3.5842 -8.00622,8.0074c0,4.4209 3.58305,8.0039 8.00622,8.0039c1.5171,0 2.9317,-0.4299 4.14,-1.1629l5.4428,5.4428l2.6986,-2.701l0,0l0,0zm-17.23357,-9.5828c0.00465,-2.73478 2.21627,-4.94636 4.95097,-4.95219c2.7337,0.00583 4.9463,2.21742 4.951,4.95219c-0.0047,2.7336 -2.2173,4.9453 -4.951,4.9522c-2.7347,-0.0069 -4.94632,-2.2186 -4.95097,-4.9522z" />
+    </svg>
+    <div class="ac-results-wrapper"></div>
   </div>
 
   <script>
@@ -97,6 +101,29 @@
       document.getElementById('modal').style.display = "none"
     }
 
+    // document.getElementById("input_search").addEventListener("keyup", async (event) => {
+    //   event.preventDefault()
+    //   if (event.keyCode === 13) {
+    //     let search_value = document.getElementById("input_search").value
+    //     let search_value_arr = search_value.split(',')
+    //     if (search_value_arr.length > 0) {
+    //       let city_raw = search_value_arr[0].trim();
+    //       let city_urlified = URLify(city_raw.toLowerCase())
+    //       let state_abbrev = search_value_arr[1].trim().toLowerCase()
+    //       let api_url = `${url_prefix}/cities/${city_urlified}/${state_abbrev}/trails?limit=15`
+    //       document.getElementById('loading').style.visibility = 'visible'  
+    //       let data = await fetch(api_url).then(r => r.json())
+    //       document.getElementById('loading').style.visibility = 'hidden'  
+    //       populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
+    //       clearMapData(map)
+    //       addSource(map, getFeatureCollection(data))
+    //       addPointsLayer(map)
+    //       if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
+    //       document.getElementById("input_search").value = ''
+    //     }
+    //   }
+    // })
+
     setCursors()
 
   </script>
@@ -105,7 +132,7 @@
     var acData = [
                     {
                       "group": "",
-                      "tags": ["Denver, CO", "Denver, NY", "New York, NY", "New York, NYC", "Los Angeles, CA", "Chicago, IL", "Houston, TX", "Springfield, IL", "Springfield, MA", "Springfield, MT", "Springfield, AZ"]
+                      "tags": ["New York, NY", "New York, NYC", "Los Angeles, CA", "Chicago, IL", "Houston, TX", "Springfield, IL", "Springfield, MA", "Springfield, MT", "Springfield, AZ"]
                     }
                 ];
     
@@ -125,30 +152,8 @@
         resultNodes = contEl.getElementsByTagName('A'),
         cache = {},
         handlers = {
-          'enter': async function (e) {
-            e.preventDefault();
-            
-            //TODO: refactor
-            let city_state_raw = e.target.innerHTML
-            let city_raw = city_state_raw.split(',')[0].trim()
-            let city_urlified = URLify(city_raw.toLowerCase())
-            let state_abbrev = city_state_raw.split(',')[1].trim().toLowerCase()
-            let api_url = `http://127.0.0.1:3000/cities/${city_urlified}/${state_abbrev}/trails?limit=15`
-
-            document.getElementById('loading').style.visibility = 'visible'  
-            let data = await fetch(api_url).then(r => r.json())
-            document.getElementById('loading').style.visibility = 'hidden'
-            
-            populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
-            clearMapData(map)
-            addSource(map, getFeatureCollection(data))
-            addPointsLayer(map)
-            
-            if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
-            document.getElementById("input_search").value = city_state_raw
-
+          'enter': function (e) {
             if (e.target.parentNode === contEl && contEl.children[0].value) {
-              //TODO: when does it ever get here?
               window.location = options.searchPath + encodeURIComponent(contEl.children[0].value);
             }
           },
@@ -181,6 +186,7 @@
         while (i--) {
           var anchorEl = document.createElement('a');
           anchorEl.href = '#';
+          //anchorEl.innerHTML = 'a<i>i</i>';
           anchorEl.innerHTML = 'a';
           wrapEl.appendChild(anchorEl);
         }
@@ -218,32 +224,34 @@
         var i = options.numResults;
         while (i--) {
           if (d && d[i]) {
-            resultNodes[i].style.display = 'block'
-            resultNodes[i].firstChild.nodeValue = d[i].tag
-            resultNodes[i].href = options.directPath + encodeURIComponent(d[i].tag)
-            resultNodes[i].onclick = async (e) => {
+            resultNodes[i].style.display = 'block';
+            resultNodes[i].firstChild.nodeValue = d[i].tag;
+            resultNodes[i].href = options.directPath + encodeURIComponent(d[i].tag);
+            
+            //resultNodes[i].href = `${options.directPath}${encodeURIComponent(d[i].tag)}/trails`;
 
-              //TODO refactor
-              e.preventDefault()
-              let city_state_raw = e.target.innerHTML
-              let city_raw = city_state_raw.split(',')[0].trim()
-              let city_urlified = URLify(city_raw.toLowerCase())
-              let state_abbrev = city_state_raw.split(',')[1].trim().toLowerCase()
-              let api_url = `http://127.0.0.1:3000/cities/${city_urlified}/${state_abbrev}/trails?limit=15`
+            // let city_state = d[i].tag.replace(/\s+/g, '')
+            // console.log('city_state', city_state)
+            // let city_raw = city_state.split(',')[0]
+            // let city_urlified = URLify(city_raw.toLowerCase())
+            // let state_abbrev = city_state.split(',')[1].toLowerCase()
+            
+            // resultNodes[i].href = `http://127.0.0.1:3000/cities/${city_urlified}/${state_abbrev}/trails?limit=15`
 
-              document.getElementById('loading').style.visibility = 'visible'  
-              let data = await fetch(api_url).then(r => r.json())
-              document.getElementById('loading').style.visibility = 'hidden'
-              
-              populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
-              clearMapData(map)
-              addSource(map, getFeatureCollection(data))
-              addPointsLayer(map)
 
-              if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
-              document.getElementById("input_search").value = city_state_raw
 
-            }
+            // document.getElementById('loading').style.visibility = 'visible'  
+            // let data = await fetch(api_url).then(r => r.json())
+            // document.getElementById('loading').style.visibility = 'hidden'  
+            // populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
+            // clearMapData(map)
+            // addSource(map, getFeatureCollection(data))
+            // addPointsLayer(map)
+            // if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
+            // document.getElementById("input_search").value = ''
+
+            
+            //resultNodes[i].firstElementChild.firstChild.nodeValue = d[i].group;
           } else if (!d || !d[i]) {
             resultNodes[i].style.display = 'none';
           }
@@ -251,7 +259,6 @@
       }
 
       function multiHandler(e) {
-        console.log('multiHandler')
         var k = e.keyCode,
           //assign a value to k if the up, down enter keys are pressed, or if the event is an input
           meth = k === 13 ? 'enter' : k === 38 ? 'up' : k === 40 ? 'down' : e.type === 'input' ? 'input' : null;
