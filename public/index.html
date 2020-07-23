@@ -150,6 +150,8 @@
             if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
             document.getElementById("input_search").value = city_state_raw
 
+            document.getElementsByClassName('ac-results-wrapper')[0].style.display = 'none';
+
             if (e.target.parentNode === contEl && contEl.children[0].value) {
               //TODO: when does it ever get here?
               window.location = options.searchPath + encodeURIComponent(contEl.children[0].value);
@@ -246,6 +248,8 @@
               if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
               document.getElementById("input_search").value = city_state_raw
 
+              document.getElementsByClassName('ac-results-wrapper')[0].style.display = 'none';
+
             }
           } else if (!d || !d[i]) {
             resultNodes[i].style.display = 'none';
@@ -254,12 +258,17 @@
       }
 
       function multiHandler(e) {
+        
+        //TODO: redo this
+        document.getElementsByClassName('ac-results-wrapper')[0].style.display = 'block';
+
         var k = e.keyCode,
           //assign a value to k if the up, down enter keys are pressed, or if the event is an input
           meth = k === 13 ? 'enter' : k === 38 ? 'up' : k === 40 ? 'down' : e.type === 'input' ? 'input' : null;
         //if 'meth' was assigned a value earlier, return the associated function and pass the event to it
         return meth ? handlers[meth](e) : null;
 
+        
       }
 
       function changeHandler(e) {
