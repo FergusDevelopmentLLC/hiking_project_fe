@@ -106,7 +106,7 @@
     var acData = [
                     {
                       "group": "",
-                      "tags": ["New York, NY", "Los Angeles, CA", "Chicago, IL", "Houston, TX"]
+                      "tags": ["New York, NY", "Los Angeles, CA", "Chicago, IL", "Houston, TX", "Springfield, IL", "Springfield, MT", "Springfield, MO", "Springfield, KS"]
                     }
                 ];
     
@@ -171,27 +171,24 @@
       }
 
       function check(q) {
-        var rxFn = function (s) {
-          return '\\b(' + s + ')(.*)';
-        },
-          rx = new RegExp(q.replace(/(\S+)/g, rxFn).replace(/\s+/g, ''), 'gi'),
-          arr = [],
-          i = data.length;
-
+        i = data.length
         function testFn(obj) {
           var j = obj.tags.length;
           while (j--) {
-            if (rx.test(obj.tags[j])) {
+            if (obj.tags[j].toLowerCase().startsWith(q.toLowerCase())) {
               arr.push({
-                'tag': obj.tags[j],
-                'group': obj.group
+                'tag': obj.tags[j]
               });
             }
           }
         }
+
+        arr = []
+
         while (i--) {
           testFn(data[i]);
         }
+        
         return arr;
       }
 
@@ -201,15 +198,7 @@
           if (d && d[i]) {
             resultNodes[i].style.display = 'block';
             resultNodes[i].firstChild.nodeValue = d[i].tag;
-            //resultNodes[i].href = options.directPath + encodeURIComponent(d[i].tag);
-            //resultNodes[i].href = `${options.directPath}${encodeURIComponent(d[i].tag)}/trails`;
-
-            let city_state = d[i].tag.replace(/\s+/g, '')
-            let city = URLify(city_state.split(',')[0].toLowerCase())
-            let state = city_state.split(',')[1].toLowerCase()
-
-            resultNodes[i].href = `${options.directPath}${city}/${state}/trails`;
-            
+            resultNodes[i].href = options.directPath + encodeURIComponent(d[i].tag);
             //resultNodes[i].firstElementChild.firstChild.nodeValue = d[i].group;
           } else if (!d || !d[i]) {
             resultNodes[i].style.display = 'none';
@@ -239,7 +228,6 @@
     };
 
     autocomplete(opts);
-
 
   </script>
 </body>

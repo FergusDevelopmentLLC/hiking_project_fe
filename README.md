@@ -76,3 +76,17 @@ https://www.digitalocean.com/community/questions/how-to-reset-the-firewall-on-ub
 https://www.digitalocean.com/community/questions/opening-ports-on-my-server
 
 https://www.digitalocean.com/community/tutorials/how-to-use-nmap-to-scan-for-open-ports-on-your-vps
+
+https://futurestud.io/tutorials/remove-all-whitespace-from-a-string-in-javascript
+
+http://htmlshell.com/
+
+http://compass-style.org/reference/compass/css3/
+
+https://dev.to/stephenafamo/how-to-create-an-autocomplete-input-with-plain-javascript
+
+http://jsfiddle.net/rockyjreed/8GcSF/
+
+https://www.w3schools.com/jsref/jsref_startswith.asp
+
+https://stackoverflow.com/questions/1789945/how-to-check-whether-a-string-contains-a-substring-in-javascript

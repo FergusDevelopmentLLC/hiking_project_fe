@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Find Hiking Trails</title>
+  
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  
+  <script src="js/iconify.min.js"></script>
+  <script src="js/parameterize.js"></script>
+  <script src="js/custom.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
+  
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
+  <link href="css/custom.css" rel="stylesheet" />
+  <link href="css/spinner.css" rel="stylesheet" />
+
+</head>
+
+<body>
+
+  <div id="map"></div>
+  <div id="loading" class="loading" onClick="hideSpinner()">Loading&#8230;</div>
+  <div id="modal">
+    <div id="close"><a>X</a></div>
+  </div>
+  <div id="search">
+    <div id="search-title">Search by <strong>city, state</strong>:</div>
+    <form id="search-form" onkeydown="return event.key != 'Enter';">
+      <div><span class="iconify" data-icon="et-magnifying-glass" data-inline="false"></span></div>
+      <div><input type="text" id="input_search" placeholder="Boulder, CO" /></div>
+      <div id="mode-wrapper">
+        <div id="crosshair"><span class="iconify" data-icon="bx:bx-target-lock" data-inline="false"></span></div>
+        <div id="pointer"><span class="iconify" data-icon="vaadin:pointer" data-inline="false"></span></div>
+      </div>
+    </form>
+    <div id="search-subtitle"></div>
+  </div>
+
+  <script>
+
+    // get bounding box: http://bboxfinder.com
+    let mapBounds = [-125.903320, 24.726875, -66.621094, 49.639177]//Southwest corner, Northeast corner
+    let cursorMode = 'pointer'
+    const url_prefix = 'http://138.68.23.63:3000'
+    //const url_prefix = 'http://127.0.0.1:3000'
+    
+    mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGNhcnRlciIsImEiOiJjamV4b2g3Z2ExOGF4MzFwN3R1dHJ3d2J4In0.Ti-hnuBH8W4bHn7k6GCpGw';
+
+    let map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/outdoors-v11',
+      center: [(mapBounds[0] + mapBounds[2]) / 2, (mapBounds[1] + mapBounds[3]) / 2],
+      zoom: 3.99,
+      minZoom: 3.99
+    })
+    
+    map.on('click', async (e) => {
+      if (cursorMode == 'crosshair') {
+        displayTrailsByLatLng(e)
+      }
+    })
+
+    map.on('load', () => {
+      handlePopup()
+    })
+
+    map.on('mouseover', (e) => {
+      map.getCanvas().style.cursor = cursorMode
+    })
+
+    map.on('mouseout', (e) => {
+      map.getCanvas().style.cursor = "default"
+    })
+
+    document.getElementById("pointer").onclick = () => {
+      cursorMode = 'pointer'
+      document.getElementById('pointer').style.display = "none"
+      document.getElementById('crosshair').style.display = "block"
+      setCursors()
+    }
+
+    document.getElementById("crosshair").onclick = () => {
+      cursorMode = 'crosshair'
+      document.getElementById('pointer').style.display = "block"
+      document.getElementById('crosshair').style.display = "none"
+      setCursors()
+    }
+
+    document.getElementById('close').onclick = () => {
+      document.getElementById('modal').style.display = "none"
+    }
+
+    document.getElementById("input_search").addEventListener("keyup", async (event) => {
+      event.preventDefault()
+      if (event.keyCode === 13) {
+        let search_value = document.getElementById("input_search").value
+        let search_value_arr = search_value.split(',')
+        if (search_value_arr.length > 0) {
+          let city_raw = search_value_arr[0].trim();
+          let city_urlified = URLify(city_raw.toLowerCase())
+          let state_abbrev = search_value_arr[1].trim().toLowerCase()
+          let api_url = `${url_prefix}/cities/${city_urlified}/${state_abbrev}/trails?limit=15`
+          document.getElementById('loading').style.visibility = 'visible'  
+          let data = await fetch(api_url).then(r => r.json())
+          document.getElementById('loading').style.visibility = 'hidden'  
+          populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
+          clearMapData(map)
+          addSource(map, getFeatureCollection(data))
+          addPointsLayer(map)
+          if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
+          document.getElementById("input_search").value = ''
+        }
+        
+      }
+    })
+
+    setCursors()
+
+  </script>
+
+</body>
+
+</html>
