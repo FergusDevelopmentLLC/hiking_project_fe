@@ -113,8 +113,8 @@ body {
     background-color: #fff;
     height: 8.3rem;
     position: absolute;
-    right: 1rem;
-    top: 1rem;
+    right: 0;
+    top: 0;
     width: 21.5rem;
   }
 

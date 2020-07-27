@@ -6,32 +6,33 @@
         cache = {},
         handlers = {
           'enter': async function (e) {
-            e.preventDefault();
-            
+            e.preventDefault()
             //TODO: refactor
             let city_state_raw = e.target.innerHTML
-            let city_raw = city_state_raw.split(',')[0].trim()
-            let city_urlified = URLify(city_raw.toLowerCase())
-            let state_abbrev = city_state_raw.split(',')[1].trim().toLowerCase()
-            let api_url = `${url_prefix}/cities/${city_urlified}/${state_abbrev}/trails?limit=15`
+            if (city_state_raw.includes(',')) {
+              let city_raw = city_state_raw.split(',')[0].trim()
+              let city_urlified = URLify(city_raw.toLowerCase())
+              let state_abbrev = city_state_raw.split(',')[1].trim().toLowerCase()
+              let api_url = `${url_prefix}/cities/${city_urlified}/${state_abbrev}/trails?limit=15`
 
-            document.getElementById('loading').style.visibility = 'visible'  
-            let data = await fetch(api_url).then(r => r.json())
-            document.getElementById('loading').style.visibility = 'hidden'
-            
-            populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
-            clearMapData(map)
-            addSource(map, getFeatureCollection(data))
-            addPointsLayer(map)
-            
-            if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
-            document.getElementById("input_search").value = city_state_raw
+              document.getElementById('loading').style.visibility = 'visible'  
+              let data = await fetch(api_url).then(r => r.json())
+              document.getElementById('loading').style.visibility = 'hidden'
+              
+              populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
+              clearMapData(map)
+              addSource(map, getFeatureCollection(data))
+              addPointsLayer(map)
+              
+              if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
+              document.getElementById("input_search").value = city_state_raw
 
-            document.getElementsByClassName('ac-results-wrapper')[0].style.display = 'none';
+              document.getElementsByClassName('ac-results-wrapper')[0].style.display = 'none'
 
-            if (e.target.parentNode === contEl && contEl.children[0].value) {
-              //TODO: when does it ever get here?
-              window.location = options.searchPath + encodeURIComponent(contEl.children[0].value);
+              if (e.target.parentNode === contEl && contEl.children[0].value) {
+                //TODO: when does it ever get here?
+                window.location = options.searchPath + encodeURIComponent(contEl.children[0].value)
+              }
             }
           },
           'up': function (e) {
