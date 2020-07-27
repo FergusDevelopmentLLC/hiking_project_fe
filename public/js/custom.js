@@ -1,6 +1,7 @@
 setCursors = () => {
 
-    let message;
+    let message
+
     if (cursorMode == 'pointer') {
       document.getElementById('pointer').style.display = "none"
       document.getElementById('crosshair').style.display = "block"
@@ -57,6 +58,10 @@ setCursors = () => {
     })
   }
 
+  zoomToLatLng = (latitude, longitude) => {
+    map.flyTo({ center: [longitude, latitude], essential: true, zoom: 17 })
+  }
+
   populateModal = (data, opts) => {
 
     if (document.getElementById('trails_title')) {
@@ -83,7 +88,7 @@ setCursors = () => {
       list["id"] = "trails_ol"
       data.forEach((trail) => {
         let item = document.createElement('li')
-        item.innerHTML = `<a href='${trail["url"]}' target='_blank'>${trail["name"]}</a> - ${trail["location"]} - ${trail["summary"]}`
+        item.innerHTML = `<a href='${trail["url"]}' target='_blank'>${trail["name"]}</a> - ${trail["location"]} - ${trail["summary"]} - <a href="javascript:zoomToLatLng(${trail["latitude"]}, ${trail["longitude"]});">zoom to trail</a>`
         list.appendChild(item);
       })
       document.getElementById('modal').appendChild(title)
