@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Find Hiking Trails</title>
+  
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+
+  <script src="js/cities.js"></script>
+  <script src="js/iconify.min.js"></script>
+  <script src="js/parameterize.js"></script>
+  <script src="js/custom.js"></script>
+  <script src="js/autocomplete.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
+  
+  <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet" />
+  <link href="css/spinner.css" rel="stylesheet" />
+  <link href="css/autocomplete.css" rel="stylesheet" />
+  <link href="css/custom.css" rel="stylesheet" />
+</head>
+
+<body>
+
+  <div id="map"></div>
+  <div id="loading" class="loading" onClick="hideSpinner()">Loading&#8230;</div>
+  <div id="modal">
+    <div id="close"><a>X</a></div>
+  </div>
+  
+  <div id="outer-container">
+    <div>
+      <a target="_blank" href="https://www.hikingproject.com/"><img src="https://res.cloudinary.com/fergusdev/image/upload/v1595873008/hikefinder/hikefinder_by_hikingproject_ncrb6y.png"></a>
+    </div>
+    <div id="search-title">Search by <strong>city, state</strong>:</div>
+    <div class="search-container">
+      <input class="search-input" id="input_search" placeholder="Boulder, CO">
+      <svg class="search-button" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+        <path fill="#009eda" d="m25.14381,22.4446l-5.4416,-5.4416c0.7341,-1.2095 1.1629,-2.6229 1.1641,-4.14c-0.0012,-4.4244 -3.583,-8.00627 -8.0039,-8.0086c-4.42316,0.00233 -8.00622,3.5842 -8.00622,8.0074c0,4.4209 3.58305,8.0039 8.00622,8.0039c1.5171,0 2.9317,-0.4299 4.14,-1.1629l5.4428,5.4428l2.6986,-2.701l0,0l0,0zm-17.23357,-9.5828c0.00465,-2.73478 2.21627,-4.94636 4.95097,-4.95219c2.7337,0.00583 4.9463,2.21742 4.951,4.95219c-0.0047,2.7336 -2.2173,4.9453 -4.951,4.9522c-2.7347,-0.0069 -4.94632,-2.2186 -4.95097,-4.9522z" />
+      </svg>
+      <div class="ac-results-wrapper"></div>
+    </div>
+    <div id="search-subtitle"></div>
+    <div id="mode-wrapper">
+      <div id="crosshair"><span class="iconify" data-icon="bx:bx-target-lock" data-inline="false"></span></div>
+      <div id="pointer"><span class="iconify" data-icon="vaadin:pointer" data-inline="false"></span></div>
+    </div>
+    
+  </div>
+
+  <script>
+
+    // get bounding box: http://bboxfinder.com
+    let mapBounds = [-125.903320, 24.726875, -66.621094, 49.639177]//Southwest corner, Northeast corner
+    let cursorMode = 'pointer'
+    const url_prefix = 'http://138.68.23.63:3000'
+    //const url_prefix = 'http://127.0.0.1:3000'
+    
+    mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGNhcnRlciIsImEiOiJjamV4b2g3Z2ExOGF4MzFwN3R1dHJ3d2J4In0.Ti-hnuBH8W4bHn7k6GCpGw';
+
+    let map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/outdoors-v11',
+      center: [(mapBounds[0] + mapBounds[2]) / 2, (mapBounds[1] + mapBounds[3]) / 2],
+      zoom: 3.99,
+      minZoom: 3.99
+    })
+    
+    map.on('click', async (e) => {
+      if (cursorMode == 'crosshair') {
+        displayTrailsByLatLng(e)
+      }
+    })
+
+    map.on('load', () => {
+      handlePopup()
+    })
+
+    map.on('mouseover', (e) => {
+      map.getCanvas().style.cursor = cursorMode
+    })
+
+    map.on('mouseout', (e) => {
+      map.getCanvas().style.cursor = "default"
+    })
+
+    document.getElementById("pointer").onclick = () => {
+      cursorMode = 'pointer'
+      document.getElementById('pointer').style.display = "none"
+      document.getElementById('crosshair').style.display = "block"
+      setCursors()
+    }
+
+    document.getElementById("crosshair").onclick = () => {
+      cursorMode = 'crosshair'
+      document.getElementById('pointer').style.display = "block"
+      document.getElementById('crosshair').style.display = "none"
+      setCursors()
+    }
+
+    document.getElementById('close').onclick = () => {
+      document.getElementById('modal').style.display = "none"
+    }
+
+    setCursors()
+
+    var acData = [{ "group": "", "tags": cities } ]
+
+    var opts = {
+      data: acData,
+      numResults: 15,
+      searchPath: '/search?q=',
+      directPath: `${url_prefix}/cities/`,
+      container: document.querySelectorAll('.search-container')[0]
+    }
+
+    autocomplete(opts)
+
+  </script>
+
+  
+</body>
+
+</html>
