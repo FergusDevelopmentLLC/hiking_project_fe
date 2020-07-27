@@ -33,6 +33,6 @@ app.use((req, res, next) => {
 })
 
 // Start the server
-const server = app.listen(8655, () => {
+const server = app.listen(80, () => {
   console.log('App listening at port %s', server.address().port)
 })
