@@ -38,12 +38,15 @@ body {
     top: 0;
     width: 20rem;
     padding: 1rem;
-    border-right: 1px solid lightgray;
-    border-bottom: 1px solid lightgray;
+    border-right: 1px solid #c7c7c7;
+    border-bottom: 1px solid #c7c7c7;
     border-radius: .2rem;
     font-size: 1rem;
     color: #222;
     background: #fff;
+    -webkit-box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.21);
+    -moz-box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.21);
+    box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.21);
   }
 
   h1 {
@@ -108,7 +111,8 @@ body {
   }
   
   #outer-container {
-    border: 1px solid lightgray;
+    border-left: 1px solid #c7c7c7;
+    border-bottom: 1px solid #c7c7c7;
     padding: .5rem;
     background-color: #fff;
     height: 8.3rem;
@@ -116,6 +120,9 @@ body {
     right: 0;
     top: 0;
     width: 21.5rem;
+    -webkit-box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.21);
+    -moz-box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.21);
+    box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.21);
   }
 
   #mode-wrapper {
