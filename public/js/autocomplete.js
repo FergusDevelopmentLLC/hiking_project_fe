@@ -16,15 +16,15 @@
               let api_url = `${url_prefix}/cities/${city_urlified}/${state_abbrev}/trails?limit=15`
 
               document.getElementById('loading').style.visibility = 'visible'  
-              let data = await fetch(api_url).then(r => r.json())
+              mapData = await fetch(api_url).then(r => r.json())
               document.getElementById('loading').style.visibility = 'hidden'
               
-              populateModal(data, { "city": city_raw, "state_abbrev": state_abbrev })
+              populateModal(mapData, { "city": city_raw, "state_abbrev": state_abbrev })
               clearMapData(map)
-              addSource(map, getFeatureCollection(data))
+              addSource(map, getFeatureCollection(mapData))
               addPointsLayer(map)
               
-              if (data.length > 0) map.flyTo({ center: [data[0]['longitude'], data[0]['latitude']], essential: true, zoom: 10 })
+              if (mapData.length > 0) map.flyTo({ center: [mapData[0]['longitude'], mapData[0]['latitude']], essential: true, zoom: 10 })
               document.getElementById("input_search").value = city_state_raw
 
               document.getElementsByClassName('ac-results-wrapper')[0].style.display = 'none'

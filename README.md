@@ -91,4 +91,16 @@ https://www.w3schools.com/jsref/jsref_startswith.asp
 
 https://stackoverflow.com/questions/1789945/how-to-check-whether-a-string-contains-a-substring-in-javascript
 
+https://www.digitalocean.com/community/questions/problem-502-bad-gateway-nginx-1-10-3-ubuntu
+
+https://askubuntu.com/questions/409541/save-the-terminal-history-to-a-file-for-print
+
+https://stackoverflow.com/questions/36168658/mapbox-gl-setstyle-removes-layers
+
+https://bl.ocks.org/tristen/0c0ed34e210a04e89984
+
+https://gis.stackexchange.com/questions/208989/how-to-test-if-a-layer-exist-in-a-mapbox-gl-js-map
+
+https://docs.mapbox.com/mapbox-gl-js/example/setstyle/
+
 

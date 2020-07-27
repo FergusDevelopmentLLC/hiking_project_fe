@@ -6,7 +6,10 @@
   <title>Find Hiking Trails</title>
   
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-
+  
+  <script>
+    var mapData;
+  </script>
   <script src="js/cities.js"></script>
   <script src="js/iconify.min.js"></script>
   <script src="js/parameterize.js"></script>
@@ -45,6 +48,13 @@
       <div id="crosshair"><span class="iconify" data-icon="bx:bx-target-lock" data-inline="false"></span></div>
       <div id="pointer"><span class="iconify" data-icon="vaadin:pointer" data-inline="false"></span></div>
     </div>
+    <div id="menu">
+      <div>Map style:</div>
+      <input id="outdoors-v11" type="radio" name="basemap" checked="checked" onclick="switchLayer()" />
+      <div>Outdoors</div>
+      <input id="satellite-v9" type="radio" name="basemap" onclick="switchLayer()" />
+      <div>Satellite</div>
+    </div>
     
   </div>
 
@@ -82,6 +92,14 @@
 
     map.on('mouseout', (e) => {
       map.getCanvas().style.cursor = "default"
+    })
+
+    map.on('style.load', function () {
+      if (mapData) {
+        clearMapData(map)
+        addSource(map, getFeatureCollection(mapData))
+        addPointsLayer(map)
+      }
     })
 
     document.getElementById("pointer").onclick = () => {
