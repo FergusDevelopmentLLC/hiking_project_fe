@@ -42,7 +42,7 @@ handlePopup = () => {
 
     for (const feature of e.features) {
       for (let [key, value] of Object.entries(feature.properties)) {
-        if (!`${key}`.includes('img') && !`${key}`.includes('url')) {
+        if (!`${key}`.includes('img') && !`${key}`.includes('url') && !`${key}`.includes('hiking_project_id')) {
           tooltip_msg += `${key}: ${value}<br/>`
         }
       }
@@ -52,63 +52,20 @@ handlePopup = () => {
     popup.setLngLat(coordinates)
       .setHTML(tooltip_msg)
       .addTo(map)
+
+    hoverMode = 'onTrail'
+
   })
 
   map.on('mouseleave', 'points', function () {
     map.getCanvas().style.cursor = cursorMode
     popup.remove()
+    hoverMode = 'offTrail'
   })
 }
 
 zoomToLatLng = (latitude, longitude) => {
   map.flyTo({ center: [longitude, latitude], essential: true, zoom: 17 })
-}
-
-populateModal = (data, opts) => {
-
-  if (document.getElementById('trails_title')) {
-    document.getElementById('trails_title').remove()
-  }
-
-  if (document.getElementById('trails_ol')) {
-    document.getElementById('trails_ol').remove()
-  }
-
-  let title = document.createElement('h1');
-  title["id"] = "trails_title"
-
-  if (data.length > 0) {
-
-    if (opts["city"] && opts["state_abbrev"]) {
-      title.appendChild(document.createTextNode(`Trails for the city: ${opts["city"]}, ${opts["state_abbrev"].toUpperCase()}`))
-    }
-    else if (opts["latitude"] && opts["longitude"]) {
-      title.appendChild(document.createTextNode(`Trails for the coords: ${opts["latitude"].toFixed(2)}, ${opts["longitude"].toFixed(2)}`))
-    }
-
-    let list = document.createElement('ol');
-    list["id"] = "trails_ol"
-    data.forEach((trail) => {
-      let item = document.createElement('li')
-      item.innerHTML = `<a href='${trail["url"]}' target='_blank'>${trail["name"]}</a> - ${trail["location"]} - ${trail["summary"]} - <a href="javascript:zoomToLatLng(${trail["latitude"]}, ${trail["longitude"]});">zoom to trail</a>`
-      list.appendChild(item);
-    })
-    document.getElementById('modal').appendChild(title)
-    document.getElementById('modal').appendChild(list)
-  }
-  else {
-
-    if (opts["city"] && opts["state_abbrev"]) {
-      title.appendChild(document.createTextNode(`No trails found for: ${opts["city"]}, ${opts["state_abbrev"].toUpperCase()}`))
-    }
-    else if (opts["latitude"] && opts["longitude"]) {
-      title.appendChild(document.createTextNode(`Trails for the coords: ${opts["latitude"].toFixed(2)}, ${opts["longitude"].toFixed(2)}`))
-    }
-
-    document.getElementById('modal').appendChild(title)
-  }
-
-  document.getElementById('modal').style.display = "block"
 }
 
 populateModalFrom = (trails, opts) => {
@@ -176,6 +133,8 @@ getFeatureCollectionFrom = (trailsArray) => {
           "coordinates": [ parseFloat(trail["longitude"]), parseFloat(trail["latitude"]) ]
         },
         "properties": {
+          "id": trail["id"],
+          "hiking_project_id": trail["hiking_project_id"],
           "name": trail["name"],
           "length": trail["length"],
           "summary": trail["summary"],
@@ -246,6 +205,8 @@ displayTrailsByLatLng = async (e) => {
 
   setSpinnerVisibilityTo('visible')
   let mapData = await fetch(apiUrl).then(r => r.json())
+
+  console.log('apiUrl', apiUrl)
   setSpinnerVisibilityTo('hidden')
 
   trailsArray = getTrailObjectsFrom(mapData)

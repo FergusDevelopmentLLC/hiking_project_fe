@@ -103,4 +103,14 @@ https://gis.stackexchange.com/questions/208989/how-to-test-if-a-layer-exist-in-a
 
 https://docs.mapbox.com/mapbox-gl-js/example/setstyle/
 
+was trying to look at 2 e's
+https://stackoverflow.com/questions/4816099/chrome-sendrequest-error-typeerror-converting-circular-structure-to-json
 
+need to get the one clicked on
+https://docs.mapbox.com/mapbox-gl-js/example/popup-on-click/
+
+https://stackoverflow.com/questions/3669801/dry-way-to-assign-hash-values-to-an-object
+
+https://stackoverflow.com/questions/15769739/determining-type-of-an-object-in-ruby
+
+https://apidock.com/rails/v4.0.2/ActiveRecord/Relation/find_or_create_by

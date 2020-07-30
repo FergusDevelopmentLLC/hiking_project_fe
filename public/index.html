@@ -61,6 +61,7 @@
     // get bounding box: http://bboxfinder.com
     let mapBounds = [-125.903320, 24.726875, -66.621094, 49.639177]//Southwest corner, Northeast corner
     let cursorMode = 'pointer'
+    let hoverMode = 'offTrail'
     const url_prefix = 'http://138.68.23.63:3000'
     //const url_prefix = 'http://127.0.0.1:3000'
     
@@ -75,8 +76,14 @@
     })
     
     map.on('click', async (e) => {
-      if (cursorMode == 'crosshair') {
+      if(hoverMode == 'offTrail' && cursorMode == 'crosshair') {
         displayTrailsByLatLng(e)
+      }
+    })
+
+    map.on('click', 'points', function(e) {
+      if(hoverMode == 'onTrail') {
+        console.log("e.features[0].properties['id']:", e.features[0].properties['id'])
       }
     })
 
@@ -99,6 +106,8 @@
         addPointsLayer(map)
       }
     })
+
+    
 
     document.getElementById("pointer").onclick = () => {
       cursorMode = 'pointer'

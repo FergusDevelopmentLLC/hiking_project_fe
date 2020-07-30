@@ -1,5 +1,7 @@
 class Trail {
     constructor(trailObject) {
+      this.id = trailObject["id"]
+      this.hiking_project_id = trailObject["hiking_project_id"]
       this.name = trailObject["name"]
       this.latitude = trailObject["latitude"]
       this.longitude = trailObject["longitude"]
