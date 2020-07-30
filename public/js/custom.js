@@ -1,3 +1,5 @@
+let trailsArray = []
+
 setCursors = () => {
 
   let message
@@ -109,6 +111,48 @@ populateModal = (data, opts) => {
   document.getElementById('modal').style.display = "block"
 }
 
+populateModalFrom = (trails, opts) => {
+
+  if (document.getElementById('trails_title')) {
+    document.getElementById('trails_title').remove()
+  }
+
+  if (document.getElementById('trails_ol')) {
+    document.getElementById('trails_ol').remove()
+  }
+
+  let title = document.createElement('h1');
+  title["id"] = "trails_title"
+  if (trails.length > 0) {
+    if (opts["city"] && opts["state_abbrev"]) {
+      title.appendChild(document.createTextNode(`Trails for the city: ${opts["city"]}, ${opts["state_abbrev"].toUpperCase()}`))
+    }
+    else if (opts["latitude"] && opts["longitude"]) {
+      title.appendChild(document.createTextNode(`Trails for the coords: ${opts["latitude"].toFixed(2)}, ${opts["longitude"].toFixed(2)}`))
+    }
+
+    let list = document.createElement('ol');
+    list["id"] = "trails_ol"
+    trails.forEach((trail) => {
+      let item = document.createElement('li')
+      item.innerHTML = `<a href='${trail["url"]}' target='_blank'>${trail["name"]}</a> - ${trail["location"]} - ${trail["summary"]} - <a href="javascript:zoomToLatLng(${trail["latitude"]}, ${trail["longitude"]});">zoom to trail</a>`
+      list.appendChild(item);
+    })
+    document.getElementById('modal').appendChild(title)
+    document.getElementById('modal').appendChild(list)
+  }
+  else {
+    if (opts["city"] && opts["state_abbrev"]) {
+      title.appendChild(document.createTextNode(`No trails found for: ${opts["city"]}, ${opts["state_abbrev"].toUpperCase()}`))
+    }
+    else if (opts["latitude"] && opts["longitude"]) {
+      title.appendChild(document.createTextNode(`Trails for the coords: ${opts["latitude"].toFixed(2)}, ${opts["longitude"].toFixed(2)}`))
+    }
+    document.getElementById('modal').appendChild(title)
+  }
+  document.getElementById('modal').style.display = "block"
+}
+
 addSource = (map, featureCollection) => {
   map.addSource('points', {
     'type': 'geojson',
@@ -119,20 +163,17 @@ addSource = (map, featureCollection) => {
   });
 }
 
-getFeatureCollection = (data) => {
+getFeatureCollectionFrom = (trailsArray) => {
 
   var featureCollection = [];
 
-  if (data.length > 0) {
-    data.forEach(function (trail) {
-      coordinates = new Array()
-      coordinates.push(parseFloat(trail["longitude"]))
-      coordinates.push(parseFloat(trail["latitude"]))
+  if (trailsArray.length > 0) {
+    trailsArray.forEach((trail) => {
       featureCollection.push({
         "type": "Feature",
         "geometry": {
           "type": "Point",
-          "coordinates": coordinates
+          "coordinates": [ parseFloat(trail["longitude"]), parseFloat(trail["latitude"]) ]
         },
         "properties": {
           "name": trail["name"],
@@ -186,17 +227,32 @@ addPointsLayer = (map) => {
   })
 }
 
+getTrailObjectsFrom = (mapData) => {
+  let returnArray = []
+  mapData.forEach((t) => {
+    returnArray.push(new Trail(t))
+  })
+  return returnArray
+}
+
+setSpinnerVisibilityTo = (state) => {
+  document.getElementById('loading').style.visibility = state
+}
+
 displayTrailsByLatLng = async (e) => {
   let lng = e.lngLat.lng
   let lat = e.lngLat.lat
-  let api_url = `${url_prefix}/trails/${lat}/${lng}/5/15`
-  document.getElementById('loading').style.visibility = 'visible'
-  mapData = await fetch(api_url).then(r => r.json())
-  document.getElementById('loading').style.visibility = 'hidden'
-  populateModal(mapData, { "latitude": lat, "longitude": lng })
+  let apiUrl = `${url_prefix}/trails/${lat}/${lng}/5/15`
 
+  setSpinnerVisibilityTo('visible')
+  let mapData = await fetch(apiUrl).then(r => r.json())
+  setSpinnerVisibilityTo('hidden')
+
+  trailsArray = getTrailObjectsFrom(mapData)
+  
+  populateModalFrom(trailsArray, { "latitude": lat, "longitude": lng })
   clearMapData(map)
-  addSource(map, getFeatureCollection(mapData))
+  addSource(map, getFeatureCollectionFrom(trailsArray))
   addPointsLayer(map)
   
   map.flyTo({ center: [lng, lat], essential: true, zoom: 10 })
@@ -208,5 +264,4 @@ switchLayer = () => {
     basemap = 'satellite-v9'
   }
   map.setStyle(`mapbox://styles/mapbox/${basemap}`)
-
 }

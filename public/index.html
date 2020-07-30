@@ -7,13 +7,11 @@
   
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
   
-  <script>
-    var mapData;
-  </script>
+  <script src="js/trail.js"></script>
+  <script src="js/custom.js"></script>
   <script src="js/cities.js"></script>
   <script src="js/iconify.min.js"></script>
   <script src="js/parameterize.js"></script>
-  <script src="js/custom.js"></script>
   <script src="js/autocomplete.js"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
   
@@ -95,9 +93,9 @@
     })
 
     map.on('style.load', function () {
-      if (mapData) {
+      if (trailsArray) {
         clearMapData(map)
-        addSource(map, getFeatureCollection(mapData))
+        addSource(map, getFeatureCollectionFrom(trailsArray))
         addPointsLayer(map)
       }
     })
