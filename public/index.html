@@ -96,7 +96,7 @@
           body: JSON.stringify( { trail: trail } )
         }
         let updatedTrail = await fetch(apiUrl, options).then(r => r.json())
-        window.open(updatedTrail['url']);
+        window.open(updatedTrail['url'])
       }
     })
 

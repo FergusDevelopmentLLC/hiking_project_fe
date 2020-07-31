@@ -68,6 +68,24 @@ zoomToLatLng = (latitude, longitude) => {
   map.flyTo({ center: [longitude, latitude], essential: true, zoom: 17 })
 }
 
+goToDetailView = async (trail_id) => {
+  trail = new Trail({})
+  trail.id = trail_id
+
+  let apiUrl = `${url_prefix}/trails/${trail.id}`
+  let latestTrail =  await fetch(apiUrl).then(r => r.json())
+  trail.detail_views = parseInt(latestTrail['detail_views']) + 1
+        
+  const options = {
+    method: 'PATCH',
+    headers: new Headers({'content-type': 'application/json'}),
+    body: JSON.stringify( { trail: trail } )
+  }
+
+  let updatedTrail = await fetch(apiUrl, options).then(r => r.json())
+  window.open(updatedTrail['url'])
+}
+
 populateModalFrom = (trails, opts) => {
 
   if (document.getElementById('trails_title')) {
@@ -92,7 +110,7 @@ populateModalFrom = (trails, opts) => {
     list["id"] = "trails_ol"
     trails.forEach((trail) => {
       let item = document.createElement('li')
-      item.innerHTML = `<a href='${trail["url"]}' target='_blank'>${trail["name"]}</a> [views: ${trail["detail_views"]}] - ${trail["location"]} - ${trail["summary"]} - <a href="javascript:zoomToLatLng(${trail["latitude"]}, ${trail["longitude"]});">zoom to trail</a>`
+      item.innerHTML = `<a href="javascript:goToDetailView(${trail["id"]});">${trail["name"]}</a> [views: ${trail["detail_views"]}] - ${trail["location"]} - ${trail["summary"]} - <a href="javascript:zoomToLatLng(${trail["latitude"]}, ${trail["longitude"]});">zoom to trail</a>`
       list.appendChild(item);
     })
     document.getElementById('modal').appendChild(title)
