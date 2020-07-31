@@ -81,9 +81,22 @@
       }
     })
 
-    map.on('click', 'points', function(e) {
+    map.on('click', 'points', async (e) => {
       if(hoverMode == 'onTrail') {
-        console.log("e.features[0].properties['id']:", e.features[0].properties['id'])
+        trail = new Trail({})
+        trail.id = e.features[0].properties['id']
+
+        let apiUrl = `${url_prefix}/trails/${trail.id}`
+        let latestTrail =  await fetch(apiUrl).then(r => r.json())
+        trail.detail_views = parseInt(latestTrail['detail_views']) + 1
+        
+        const options = {
+          method: 'PATCH',
+          headers: new Headers({'content-type': 'application/json'}),
+          body: JSON.stringify( { trail: trail } )
+        }
+        let updatedTrail = await fetch(apiUrl, options).then(r => r.json())
+        window.open(updatedTrail['url']);
       }
     })
 

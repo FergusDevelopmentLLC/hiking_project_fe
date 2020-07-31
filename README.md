@@ -114,3 +114,7 @@ https://stackoverflow.com/questions/3669801/dry-way-to-assign-hash-values-to-an-
 https://stackoverflow.com/questions/15769739/determining-type-of-an-object-in-ruby
 
 https://apidock.com/rails/v4.0.2/ActiveRecord/Relation/find_or_create_by
+
+https://googlechrome.github.io/samples/fetch-api/fetch-post.html
+
+https://stackoverflow.com/questions/24565589/can-i-pass-default-value-to-rails-generate-migration

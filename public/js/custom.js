@@ -42,7 +42,7 @@ handlePopup = () => {
 
     for (const feature of e.features) {
       for (let [key, value] of Object.entries(feature.properties)) {
-        if (!`${key}`.includes('img') && !`${key}`.includes('url') && !`${key}`.includes('hiking_project_id')) {
+        if (!`${key}`.includes('img') && !`${key}`.includes('url') && !`${key}`.includes('hiking_project_id') && !`${key}`.includes('id')) {
           tooltip_msg += `${key}: ${value}<br/>`
         }
       }
@@ -92,7 +92,7 @@ populateModalFrom = (trails, opts) => {
     list["id"] = "trails_ol"
     trails.forEach((trail) => {
       let item = document.createElement('li')
-      item.innerHTML = `<a href='${trail["url"]}' target='_blank'>${trail["name"]}</a> - ${trail["location"]} - ${trail["summary"]} - <a href="javascript:zoomToLatLng(${trail["latitude"]}, ${trail["longitude"]});">zoom to trail</a>`
+      item.innerHTML = `<a href='${trail["url"]}' target='_blank'>${trail["name"]}</a> [views: ${trail["detail_views"]}] - ${trail["location"]} - ${trail["summary"]} - <a href="javascript:zoomToLatLng(${trail["latitude"]}, ${trail["longitude"]});">zoom to trail</a>`
       list.appendChild(item);
     })
     document.getElementById('modal').appendChild(title)
@@ -155,7 +155,8 @@ getFeatureCollectionFrom = (trailsArray) => {
           "url": trail["url"],
           "conditionStatus": trail["conditionStatus"],
           "conditionDetails": trail["conditionDetails"],
-          "conditionDate": trail["conditionDate"]
+          "conditionDate": trail["conditionDate"],
+          "detail_views": trail["detail_views"]
         }
       });
     })
@@ -205,8 +206,6 @@ displayTrailsByLatLng = async (e) => {
 
   setSpinnerVisibilityTo('visible')
   let mapData = await fetch(apiUrl).then(r => r.json())
-
-  console.log('apiUrl', apiUrl)
   setSpinnerVisibilityTo('hidden')
 
   trailsArray = getTrailObjectsFrom(mapData)

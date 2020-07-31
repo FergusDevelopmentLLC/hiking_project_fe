@@ -22,6 +22,7 @@ class Trail {
       this.url = trailObject["url"],
       this.conditionStatus =  trailObject["conditionStatus"],
       this.conditionDetails = trailObject["conditionDetails"],
-      this.conditionDate = trailObject["conditionDate"]
+      this.conditionDate = trailObject["conditionDate"],
+      this.detail_views = trailObject["detail_views"]
     }
   }
