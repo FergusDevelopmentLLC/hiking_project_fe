@@ -7,11 +7,9 @@ var autocomplete = (options) => {
     handlers = {
       'enter': async (e) => {
         e.preventDefault()
-        let cityStateRaw = e.target.innerHTML
-        populate(cityStateRaw)
+        populate(e.target.innerHTML)//enter on selection from autocomplete
         if (e.target.parentNode === contEl && contEl.children[0].value) {
-          //TODO: when does it ever get here?
-          window.location = options.searchPath + encodeURIComponent(contEl.children[0].value)
+          populate(contEl.children[0].value)//enter when just typing in a city and pressing enter
         }
       },
       'up': (e) => {
