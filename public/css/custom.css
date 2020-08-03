@@ -1,3 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  width: 100%;
+  display: block;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -115,7 +129,7 @@ body {
     border-bottom: 1px solid #c7c7c7;
     padding: .5rem;
     background-color: #fff;
-    height: 10rem;
+    height: 14.5rem;
     position: absolute;
     right: 0;
     top: 0;
@@ -127,7 +141,7 @@ body {
 
   #mode-wrapper {
     position: absolute;
-    top: 4.2rem;
+    top: 5.7rem;
     right: .1rem;
   }
 
@@ -141,5 +155,17 @@ body {
   input[type="radio"] {
     margin: 0.1rem .2rem 0 .5rem;
   }
+
+  .hike-finder {
+    width: 18rem;
+    margin: auto;
+  }
+  
+  .powered-by-hiking-project {
+    width: 10rem;
+    margin: .75rem auto;
+  }
+
+  
 
   
