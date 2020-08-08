@@ -67,7 +67,11 @@
     const url_prefix = 'http://138.68.23.63:3000'
     //const url_prefix = 'http://127.0.0.1:3000'
     
-    mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGNhcnRlciIsImEiOiJjamV4b2g3Z2ExOGF4MzFwN3R1dHJ3d2J4In0.Ti-hnuBH8W4bHn7k6GCpGw';
+    mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGNhcnRlciIsImEiOiJjamV4b2g3Z2ExOGF4MzFwN3R1dHJ3d2J4In0.Ti-hnuBH8W4bHn7k6GCpGw'
+
+    // mapboxgl.setRTLTextPlugin(
+    //     'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'
+    // );
 
     let map = new mapboxgl.Map({
       container: 'map',
@@ -119,10 +123,26 @@
         clearMapData(map)
         addSource(map, getFeatureCollectionFrom(trailsArray))
         addPointsLayer(map)
+        
+
+        // map.setLayoutProperty('points', 'text-field', [
+        //     'format',
+        //     ['get', 'name_en'],
+        //     { 'font-scale': 1.2 },
+        //     '\n',
+        //     {},
+        //     ['get', 'name'],
+        //     {
+        //         'font-scale': 0.8,
+        //         'text-font': [
+        //             'literal',
+        //             ['DIN Offc Pro Italic', 'Arial Unicode MS Regular']
+        //         ]
+        //     }
+        // ])
+
       }
     })
-
-    
 
     document.getElementById("pointer").onclick = () => {
       cursorMode = 'pointer'
