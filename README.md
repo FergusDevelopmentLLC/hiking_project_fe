@@ -1,4 +1,4 @@
-# Hikefinder.net (Frontend API)
+# Hikefinder.net (Front end API)
 
 Find hiking trails anywhere in the USA. Live demo: http://hikefinder.net
 
@@ -15,7 +15,7 @@ $ sudo node server.js
 ```
 5. Open your browser to http://127.0.0.1
 
-## Backend Repository
+## Back end Repository
 
 https://github.com/FergusDevelopmentLLC/hiking_project_api
 
