@@ -4,10 +4,10 @@ Find hiking trails anywhere in the USA. Live demo: http://hikefinder.net
 
 ## Installation
 
-1. Get a free access token from [Mapbox](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/). 
+1. Get a free access token from [Mapbox](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/) (optional).
 2. Follow these [instructions](https://www.taniarascia.com/how-to-install-and-use-node-js-and-npm-mac-and-windows/) to install npm and node.
 3. Clone this repository.
-4. Edit /public/index.html. Replace existing Mapbox access token with yours from step #1, line 70.
+4. Edit /public/index.html. Replace existing Mapbox access token with yours from step #1, line 70 (optional).
 4. Run:
 ```
 $ cd hiking_project_fe
