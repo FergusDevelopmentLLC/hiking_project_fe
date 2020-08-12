@@ -15,6 +15,10 @@ $ sudo node server.js
 ```
 5. Open your browser to http://127.0.0.1
 
+## Backend Repository
+
+https://github.com/FergusDevelopmentLLC/hiking_project_api
+
 
 ## Live demo
 
