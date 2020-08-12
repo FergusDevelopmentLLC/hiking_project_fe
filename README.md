@@ -1,6 +1,6 @@
-# HikeFinder.net 
+# Hikefinder.net 
 
-Find hiking trails anywhere in the USA.
+Find hiking trails anywhere in the USA. Live demo: http://hikefinder.net
 
 ## Installation
 
