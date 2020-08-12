@@ -118,6 +118,7 @@ var autocomplete = (options) => {
       clearMapData(map)
       addSource(map, getFeatureCollectionFrom(trailsArray))
       addPointsLayer(map)
+      setTrailLabels()
 
       if (trailsArray.length > 0) map.flyTo({ center: [trailsArray[0]['longitude'], trailsArray[0]['latitude']], essential: true, zoom: 10 })
 

@@ -184,6 +184,11 @@ getFeatureCollectionFrom = (trailsArray) => {
 }
 
 clearMapData = (map) => {
+  
+  if (map.getLayer("poi-labels")) {
+    map.removeLayer("poi-labels");
+  }
+
   if (map.getLayer("points")) {
     map.removeLayer("points");
   }
@@ -200,8 +205,9 @@ addPointsLayer = (map) => {
     'source': 'points',
     'paint': {
       'circle-radius': 5,
-      'circle-color': '#e6550d'
+      'circle-color': '#000000'
     }
+    //'circle-color': '#e6550d'
   })
 }
 
@@ -215,6 +221,29 @@ getTrailObjectsFrom = (mapData) => {
 
 setSpinnerVisibilityTo = (state) => {
   document.getElementById('loading').style.visibility = state
+}
+
+setTrailLabels = () => {
+
+  if (trailsArray) {
+    clearMapData(map)
+    addSource(map, getFeatureCollectionFrom(trailsArray))
+    addPointsLayer(map)
+      
+    map.addLayer({
+      'id': 'poi-labels',
+      'type': 'symbol',
+      'source': 'points',
+      'layout': {
+          'text-field': ['get', 'name'],
+          'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+          'text-radial-offset': 0.5,
+          'text-justify': 'auto',
+          'text-size': 9
+      }
+    })      
+  }
+
 }
 
 displayTrailsByLatLng = async (e) => {
@@ -232,6 +261,7 @@ displayTrailsByLatLng = async (e) => {
   clearMapData(map)
   addSource(map, getFeatureCollectionFrom(trailsArray))
   addPointsLayer(map)
+  setTrailLabels()
   
   map.flyTo({ center: [lng, lat], essential: true, zoom: 10 })
 }
@@ -243,3 +273,5 @@ switchLayer = () => {
   }
   map.setStyle(`mapbox://styles/mapbox/${basemap}`)
 }
+
+        

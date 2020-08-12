@@ -101,7 +101,9 @@
           headers: new Headers({'content-type': 'application/json'}),
           body: JSON.stringify( { trail: trail } )
         }
+
         let updatedTrail = await fetch(apiUrl, options).then(r => r.json())
+        
         window.open(updatedTrail['url'])
       }
     })
@@ -118,30 +120,8 @@
       map.getCanvas().style.cursor = "default"
     })
 
-    map.on('style.load', function () {
-      if (trailsArray) {
-        clearMapData(map)
-        addSource(map, getFeatureCollectionFrom(trailsArray))
-        addPointsLayer(map)
-        
-
-        // map.setLayoutProperty('points', 'text-field', [
-        //     'format',
-        //     ['get', 'name_en'],
-        //     { 'font-scale': 1.2 },
-        //     '\n',
-        //     {},
-        //     ['get', 'name'],
-        //     {
-        //         'font-scale': 0.8,
-        //         'text-font': [
-        //             'literal',
-        //             ['DIN Offc Pro Italic', 'Arial Unicode MS Regular']
-        //         ]
-        //     }
-        // ])
-
-      }
+    map.on('style.load', () => {
+      setTrailLabels()
     })
 
     document.getElementById("pointer").onclick = () => {
@@ -169,7 +149,6 @@
     var opts = {
       data: acData,
       numResults: 15,
-      searchPath: '/search?q=',
       directPath: `${url_prefix}/cities/`,
       container: document.querySelectorAll('.search-container')[0]
     }
