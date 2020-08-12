@@ -1,4 +1,4 @@
-# Hikefinder.net (front end)
+# Hikefinder.net (Frontend API)
 
 Find hiking trails anywhere in the USA. Live demo: http://hikefinder.net
 
