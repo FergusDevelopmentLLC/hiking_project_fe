@@ -19,6 +19,9 @@ $ sudo node server.js
 
 https://github.com/FergusDevelopmentLLC/hiking_project_api
 
+## Deliverables
+
+Here is a list of project deliverables for the back end and front end (specific line numbers are referenced for each deliverable) https://github.com/FergusDevelopmentLLC/hiking_project_api/blob/master/deliverables.md
 
 ## Live demo
 
