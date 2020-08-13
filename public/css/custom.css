@@ -169,6 +169,10 @@ input[type="radio"] {
   margin: .75rem auto;
 }
 
+.search-container {
+  width: 17.5rem;
+}
+
 @media screen and (max-width: 675px) {
   
   body {
@@ -176,9 +180,19 @@ input[type="radio"] {
     background-color: #578f3f;
   }
   
+  .hike-finder {
+    width: 10rem;
+    margin: auto;
+  }
+  
+  .powered-by-hiking-project {
+    display: none;
+  }
+
   #map {
     /* position: absolute; */
     position: relative;
+    margin: auto;
     width: 97vw;
     height: calc(100vh - 18rem);
     order: 2;
@@ -187,7 +201,8 @@ input[type="radio"] {
   #outer-container {
     position: relative;
     margin: 0 auto .5rem auto;
-    height: 14.5rem;
+    height: 10.5rem;
+    width: 19rem;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -195,12 +210,13 @@ input[type="radio"] {
 
   #modal {
     position: relative;
+    width: 19rem;
     order: 3;
-    margin: .5rem auto .5rem auto;
+    margin: .5rem auto;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
+    font-size: .8rem;
   }
 
-  
 }
