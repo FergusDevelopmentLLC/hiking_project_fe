@@ -194,7 +194,7 @@ input[type="radio"] {
     position: relative;
     margin: auto;
     width: 97vw;
-    height: calc(100vh - 18rem);
+    height: calc(100vh - 17rem);
     order: 2;
   }
 
