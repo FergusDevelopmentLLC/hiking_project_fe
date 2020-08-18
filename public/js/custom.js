@@ -7,12 +7,12 @@ setCursors = () => {
   if (cursorMode == 'pointer') {
     document.getElementById('pointer').style.display = "none"
     document.getElementById('crosshair').style.display = "block"
-    message = "Or, click the <strong>crosshair</strong> to search by specific location"
+    message = "Click the <strong>crosshair</strong> to search by specific location"
   }
   else {
     document.getElementById('pointer').style.display = "block"
     document.getElementById('crosshair').style.display = "none"
-    message = "Or, click the <strong>pointer</strong> to pan the map"
+    message = "Click the <strong>pointer</strong> to pan the map"
   }
 
   document.getElementById('search-subtitle').innerHTML = message
