@@ -247,12 +247,13 @@ setTrailLabels = () => {
 }
 
 displayTrailsByLatLng = async (e) => {
+  
   let lng = e.lngLat.lng
   let lat = e.lngLat.lat
   let apiUrl = `${url_prefix}/trails/${lat}/${lng}/5/15`
-
+  
   console.log('apiUrl', apiUrl)
-
+  
   setSpinnerVisibilityTo('visible')
   let mapData = await fetch(apiUrl).then(r => r.json())
   setSpinnerVisibilityTo('hidden')
