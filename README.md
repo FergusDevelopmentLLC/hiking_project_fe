@@ -1,27 +1,25 @@
-# Hikefinder.net (Front end API)
+# Success Pies (Front end)
 
-Find hiking trails anywhere in the USA. Live demo: http://hikefinder.net
+Success pies, a tool to help you keep track of your goals in a visual manner.
 
 ## Installation
 
-1. Get a free access token from [Mapbox](https://docs.mapbox.com/help/how-mapbox-works/access-tokens/) (optional).
-2. Follow these [instructions](https://www.taniarascia.com/how-to-install-and-use-node-js-and-npm-mac-and-windows/) to install npm and node.
-3. Clone this repository.
-4. Edit /public/index.html. Replace existing Mapbox access token with yours from step #1, line 70 (optional).
-4. Run:
+1. You must have a backend for this project running. Install this backend repository locally first:  
+https://github.com/FergusDevelopmentLLC/pies_api
+2. Start the back end repository
+3. Clone this repository into a new folder
+
 ```
-$ cd hiking_project_fe
-$ sudo node server.js
+$ cd pies_fe
+$ npm install
+$ npm start
 ```
-5. Open your browser to http://127.0.0.1
+3. Open your browser to http://127.0.0.1:3030
 
 ## Back end repository
 
-https://github.com/FergusDevelopmentLLC/hiking_project_api
-
-## Deliverables
-
-Here is a list of project deliverables for the back end and front end (specific line numbers are referenced for each deliverable) https://github.com/FergusDevelopmentLLC/hiking_project_api/blob/master/deliverables.md
+The following repository is the back end for this front end:  
+https://github.com/FergusDevelopmentLLC/pies_api
 
 ## Blog post
 
@@ -36,10 +34,6 @@ https://www.youtube.com/watch?v=2fK7-zI9Kzc
 
 https://www.youtube.com/watch?v=C-d2N8V-Zps
 
-## Live demo
-
-http://hikefinder.net
-
 ## Contributing Bugfixes or Features
 
 * Fork the this repository
@@ -49,4 +43,4 @@ http://hikefinder.net
 
 ## License
 
-Hikefinder is licensed under the MIT license. (http://opensource.org/licenses/MIT)
+Success pies is licensed under the MIT license. (http://opensource.org/licenses/MIT)
