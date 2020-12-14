@@ -1,6 +1,6 @@
-# Success Pies (Front end)
+# Success Pies (React/Redux front end)
 
-Success pies, a tool to help you keep track of your goals in a visual manner.
+Success pies is a tool to help you keep track of your goals in a visual manner.
 
 ## Installation
 
