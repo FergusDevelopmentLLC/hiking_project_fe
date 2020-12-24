@@ -107,7 +107,8 @@ var autocomplete = (options) => {
       let cityRaw = cityStateRaw.split(',')[0].trim()
       let cityUrlified = URLify(cityRaw.toLowerCase())
       let stateAbbrev = cityStateRaw.split(',')[1].trim().toLowerCase()
-      let apiUrl = `${url_prefix}/cities/${cityUrlified}/${stateAbbrev}/trails?limit=15`
+      let apiUrl = `${url_prefix}cities/${cityUrlified}/${stateAbbrev}/trails?limit=10`
+      console.log('apiUrl', apiUrl)
 
       setSpinnerVisibilityTo('visible')
       let mapData = await fetch(apiUrl).then(r => r.json())

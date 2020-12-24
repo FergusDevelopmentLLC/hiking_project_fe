@@ -250,7 +250,7 @@ displayTrailsByLatLng = async (e) => {
   
   let lng = e.lngLat.lng
   let lat = e.lngLat.lat
-  let apiUrl = `${url_prefix}/trails/${lat}/${lng}/5/15`
+  let apiUrl = `${url_prefix}/trails/${lat}/${lng}/5/10`
   
   console.log('apiUrl', apiUrl)
   
