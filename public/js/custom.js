@@ -251,6 +251,7 @@ displayTrailsByLatLng = async (e) => {
   let lng = e.lngLat.lng
   let lat = e.lngLat.lat
   let apiUrl = `${url_prefix}/trails/${lat}/${lng}/5/10`
+  apiUrl = `http://138.68.23.63:3000/trails/${lat}/${lng}/5/10`
   
   console.log('apiUrl', apiUrl)
   
