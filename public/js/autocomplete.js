@@ -107,7 +107,10 @@ var autocomplete = (options) => {
       let cityRaw = cityStateRaw.split(',')[0].trim()
       let cityUrlified = URLify(cityRaw.toLowerCase())
       let stateAbbrev = cityStateRaw.split(',')[1].trim().toLowerCase()
+
       let apiUrl = `${url_prefix}cities/${cityUrlified}/${stateAbbrev}/trails?limit=10`
+      apiUrl = `http://138.68.23.63:3000/cities/${cityUrlified}/${stateAbbrev}/trails?limit=10`
+
       console.log('apiUrl', apiUrl)
 
       setSpinnerVisibilityTo('visible')
